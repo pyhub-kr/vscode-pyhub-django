@@ -34,6 +34,21 @@
       {
         "command": "django-power-tools.helloWorld",
         "title": "Django Power Tools: Hello World"
+      },
+      {
+        "command": "django-power-tools.runServer",
+        "title": "Django: 개발 서버 시작",
+        "category": "Django"
+      },
+      {
+        "command": "django-power-tools.makeMigrations",
+        "title": "Django: 마이그레이션 생성",
+        "category": "Django"
+      },
+      {
+        "command": "django-power-tools.migrate",
+        "title": "Django: 마이그레이션 적용",
+        "category": "Django"
       }
     ],
     "configuration": {
