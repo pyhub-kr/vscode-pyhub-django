@@ -235,21 +235,18 @@ class Review(models.Model):
         assert.ok(memberNames.includes('name'));
         assert.ok(memberNames.includes('bio'));
         
-        // Test reverse relation - TODO: Implement reverse relation support
-        // This would require tracking related_name from ForeignKey definitions
-        // and creating virtual manager fields on the related model
+        // Test reverse relation
+        document = createMockDocument('author = Author.objects.first(); author.books.');
         
-        // document = createMockDocument('author = Author.objects.first(); author.books.');
-        // 
-        // position = new vscode.Position(0, 47);
-        // completions = await completionProvider.provideCompletionItems(
-        //     document, position, {} as any, {} as any
-        // );
-        //
-        // memberNames = completions.map(item => item.label);
-        // assert.ok(memberNames.includes('all'));
-        // assert.ok(memberNames.includes('filter'));
-        // assert.ok(memberNames.includes('create'));
+        position = new vscode.Position(0, 47);
+        completions = await completionProvider.provideCompletionItems(
+            document, position, {} as any, {} as any
+        );
+
+        memberNames = completions.map(item => item.label);
+        assert.ok(memberNames.includes('all'));
+        assert.ok(memberNames.includes('filter'));
+        assert.ok(memberNames.includes('create'));
     });
 
     test('should cache analysis results for performance', async () => {

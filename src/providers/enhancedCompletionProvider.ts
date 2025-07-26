@@ -44,7 +44,23 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
             /\w+\.objects\.exclude\([^)]*\)\.$/,
             /\w+\.objects\.get\([^)]*\)\.$/,
             /\w+\.(objects|published|active|archived)\.$/, // Common manager names
+            /\w+\.\w+_set\.$/, // Default reverse relation pattern
+            /\w+\.\w+s\.$/, // Common reverse relation names (plurals like 'books', 'reviews')
         ];
+        
+        // Also check if this might be a reverse relation from the analyzer
+        const match = linePrefix.match(/(\w+)\.(\w+)\.$/);
+        if (match) {
+            const [_, variableName, attributeName] = match;
+            const models = this.analyzer.getAllModels();
+            
+            // Check all models to see if any have this as a manager/reverse relation
+            for (const model of Object.values(models)) {
+                if (model.managers.some(m => m.name === attributeName)) {
+                    return true;
+                }
+            }
+        }
         
         // Also check if this might be a QuerySet variable
         const variableName = linePrefix.match(/^(\w+)\.$/)?.[1];
@@ -80,12 +96,7 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
     }
 
     private isRelatedFieldContext(linePrefix: string): boolean {
-        // Check if we're accessing a related field
-        // Pattern: something like "book.author." where we have:
-        // 1. A variable assignment before it (e.g., "book = Book.objects.first(); book.author.")
-        // 2. And it's not a known manager name
-        
-        const managerNames = ['objects', 'published', 'active', 'archived', 'all_objects'];
+        // Check if we're accessing a related field (not a manager)
         const match = linePrefix.match(/(\w+)\.(\w+)\.$/);
         
         if (!match) {
@@ -94,14 +105,25 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
         
         const [_, variable, field] = match;
         
-        // If the field is a known manager name, it's not a related field
-        if (managerNames.includes(field)) {
+        // Check if this field is a manager/reverse relation
+        const models = this.analyzer.getAllModels();
+        for (const model of Object.values(models)) {
+            if (model.managers.some(m => m.name === field)) {
+                // This is a manager, not a related field
+                return false;
+            }
+        }
+        
+        // Check if it's a common manager pattern
+        const managerNames = ['objects', 'published', 'active', 'archived', 'all_objects'];
+        if (managerNames.includes(field) || field.endsWith('_set') || field.endsWith('s')) {
             return false;
         }
         
-        // If the line contains an assignment with the variable name, it's likely accessing a model instance field
-        // This is a simple heuristic - in a real implementation, we'd track variable types properly
-        return linePrefix.includes(`${variable} =`) || linePrefix.includes(`${variable}=`);
+        // If the line contains an assignment with the variable name before the current position,
+        // it's likely accessing a model instance field
+        const beforeCursor = linePrefix.substring(0, linePrefix.lastIndexOf(`${variable}.${field}.`));
+        return beforeCursor.includes(`${variable} =`) || beforeCursor.includes(`${variable}=`);
     }
 
     private async getManagerCompletions(linePrefix: string): Promise<vscode.CompletionItem[]> {
@@ -128,23 +150,43 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
         });
         completions.push(...standardMethods);
         
-        // Try to extract custom manager methods
+        // Try to extract custom manager methods or reverse relations
         const managerMatch = linePrefix.match(/(\w+)\.(\w+)\.$/);
         if (managerMatch) {
-            const modelName = managerMatch[1];
+            const variableName = managerMatch[1];
             const managerName = managerMatch[2];
             
             const models = this.analyzer.getAllModels();
-            const model = models[modelName];
+            
+            // First try exact match with variable name as model name
+            let model = models[variableName];
+            
+            // If not found, try to find by variable pattern (e.g., 'author' -> 'Author')
+            if (!model) {
+                const capitalizedName = variableName.charAt(0).toUpperCase() + variableName.slice(1);
+                model = models[capitalizedName];
+            }
             
             if (model && model.managers) {
                 const manager = model.managers.find(m => m.name === managerName);
-                if (manager && manager.methods) {
-                    for (const methodName of manager.methods) {
-                        const item = new vscode.CompletionItem(methodName, vscode.CompletionItemKind.Method);
-                        item.detail = `Custom manager method`;
-                        item.insertText = new vscode.SnippetString(`${methodName}($0)`);
-                        completions.push(item);
+                if (manager) {
+                    // For RelatedManager, use standard QuerySet methods
+                    if (manager.type === 'RelatedManager') {
+                        // RelatedManager has all QuerySet methods plus create()
+                        const createMethod = new vscode.CompletionItem('create', vscode.CompletionItemKind.Method);
+                        createMethod.detail = 'create(**kwargs)';
+                        createMethod.documentation = new vscode.MarkdownString('Create and save a new related object');
+                        createMethod.insertText = new vscode.SnippetString('create($0)');
+                        completions.push(createMethod);
+                        // Don't forget to return standard methods too - they're already added above
+                    } else if (manager.methods) {
+                        // Custom manager methods
+                        for (const methodName of manager.methods) {
+                            const item = new vscode.CompletionItem(methodName, vscode.CompletionItemKind.Method);
+                            item.detail = `Custom manager method`;
+                            item.insertText = new vscode.SnippetString(`${methodName}($0)`);
+                            completions.push(item);
+                        }
                     }
                 }
             }

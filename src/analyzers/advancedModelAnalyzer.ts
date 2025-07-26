@@ -63,9 +63,12 @@ export class AdvancedModelAnalyzer {
                 const enhancedModel = await this.enhanceModelInfo(model, code);
                 this.models.set(model.name, enhancedModel);
                 
-                // Extract relations
-                this.extractRelations(enhancedModel);
+                // Extract relations with source code for related_name extraction
+                this.extractRelations(enhancedModel, code);
             }
+            
+            // After all models are analyzed, add reverse relations
+            this.addReverseRelations();
         } catch (error) {
             console.error(`Error analyzing model file ${filePath}:`, error);
         }
@@ -249,7 +252,7 @@ export class AdvancedModelAnalyzer {
         return /class\s+Meta\s*:[\s\S]*?abstract\s*=\s*True/.test(classBody);
     }
 
-    private extractRelations(model: EnhancedModelInfo): void {
+    private extractRelations(model: EnhancedModelInfo, code: string): void {
         for (const field of model.fields) {
             if (['ForeignKey', 'OneToOneField', 'ManyToManyField'].includes(field.type)) {
                 // If the field already has relatedModel from parsing, use it
@@ -263,7 +266,7 @@ export class AdvancedModelAnalyzer {
                     toModel: field.relatedModel || 'UnknownModel',
                     fieldName: field.name,
                     relationType: field.type as any,
-                    relatedName: this.extractRelatedName(field)
+                    relatedName: this.extractRelatedNameFromCode(code, model.name, field.name)
                 };
                 
                 this.relations.push(relation);
@@ -305,14 +308,29 @@ export class AdvancedModelAnalyzer {
         return 'RelatedModel';
     }
 
-    private extractRelatedName(field: FieldInfo): string | undefined {
-        // Extract related_name from field definition
-        if (!field.helpText) {
+    private extractRelatedNameFromCode(code: string, modelName: string, fieldName: string): string | undefined {
+        // Extract the model class body
+        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=\\nclass\\s+\\w+|\\n\\n|$)`, 's');
+        const classMatch = code.match(classRegex);
+        
+        if (!classMatch) {
             return undefined;
         }
         
+        const classBody = classMatch[1];
+        
+        // Find the field definition line
+        const fieldRegex = new RegExp(`${fieldName}\\s*=\\s*models\\.\\w+\\s*\\([^)]*\\)`, 'g');
+        const fieldMatch = fieldRegex.exec(classBody);
+        
+        if (!fieldMatch) {
+            return undefined;
+        }
+        
+        const fieldDef = fieldMatch[0];
+        
         // Look for related_name parameter
-        const relatedNameMatch = field.helpText.match(/related_name\s*=\s*['"]([^'"]+)['"]/);
+        const relatedNameMatch = fieldDef.match(/related_name\s*=\s*['"]([^'"]+)['"]/);
         if (relatedNameMatch) {
             return relatedNameMatch[1];
         }
@@ -413,5 +431,49 @@ export class AdvancedModelAnalyzer {
 
     getFieldLookups(fieldType: string): string[] {
         return getFieldLookups(fieldType);
+    }
+    
+    private addReverseRelations(): void {
+        // For each relation, add a reverse relation field to the target model
+        for (const relation of this.relations) {
+            const targetModel = this.models.get(relation.toModel);
+            if (!targetModel) {
+                continue;
+            }
+            
+            // Determine the field name for the reverse relation
+            let reverseFieldName: string;
+            if (relation.relatedName) {
+                reverseFieldName = relation.relatedName;
+            } else {
+                // Django default: lowercase model name + '_set'
+                reverseFieldName = relation.fromModel.toLowerCase() + '_set';
+            }
+            
+            // Check if the reverse field already exists (to avoid duplicates)
+            if (targetModel.fields.some(f => f.name === reverseFieldName)) {
+                continue;
+            }
+            
+            // Add a virtual field representing the reverse relation
+            const reverseField: FieldInfo = {
+                name: reverseFieldName,
+                type: 'RelatedManager',
+                required: false,
+                helpText: `Reverse relation from ${relation.fromModel}.${relation.fieldName}`,
+                relatedModel: relation.fromModel
+            };
+            
+            targetModel.fields.push(reverseField);
+            
+            // Also add it as a manager so it gets manager methods
+            const reverseManager: ManagerInfo = {
+                name: reverseFieldName,
+                type: 'RelatedManager',
+                methods: [] // Will use default QuerySet methods
+            };
+            
+            targetModel.managers.push(reverseManager);
+        }
     }
 }
