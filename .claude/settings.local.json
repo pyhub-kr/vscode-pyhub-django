@@ -12,7 +12,8 @@
       "Bash(npm install:*)",
       "Bash(mv:*)",
       "Bash(mkdir:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(npm version:*)"
     ],
     "deny": []
   }
