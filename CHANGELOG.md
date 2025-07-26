@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2025-07-27
+
+### Fixed
+- GitHub Actions workflow test environment with xvfb for Linux
+- Test runner configuration with proper logging and launch arguments
+- Removed incorrect test:unit script that couldn't run VS Code extension tests
+
 ## [0.1.1] - 2025-07-27
 
 ### Added
@@ -39,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - All tests passing (86 tests, 100% success rate)
 
-[Unreleased]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/pyhub-kr/vscode-pyhub-django/releases/tag/v0.1.0
