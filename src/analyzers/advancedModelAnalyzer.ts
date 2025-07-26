@@ -164,7 +164,7 @@ export class AdvancedModelAnalyzer {
 
     private extractManagers(code: string, modelName: string): ManagerInfo[] {
         const managers: ManagerInfo[] = [
-            { name: 'objects', type: 'Manager' } // Default manager
+            { name: 'objects', type: 'Manager', methods: [] } // Default manager
         ];
         
         const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=class\\s+\\w+|$)`);
@@ -183,11 +183,41 @@ export class AdvancedModelAnalyzer {
         while ((match = managerRegex.exec(classBody)) !== null) {
             const [_, managerName, managerType] = match;
             if (managerType.includes('Manager') && managerName !== 'objects') {
-                managers.push({ name: managerName, type: managerType });
+                // Extract methods from the manager class
+                const managerMethods = this.extractManagerMethods(code, managerType);
+                managers.push({ name: managerName, type: managerType, methods: managerMethods });
             }
         }
         
         return managers;
+    }
+    
+    private extractManagerMethods(code: string, managerClassName: string): string[] {
+        const methods: string[] = [];
+        
+        // Find the manager class definition
+        const classRegex = new RegExp(`class\\s+${managerClassName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=class\\s+\\w+|$)`);
+        const classMatch = code.match(classRegex);
+        
+        if (!classMatch) {
+            return methods;
+        }
+        
+        const classBody = classMatch[1];
+        
+        // Find method definitions
+        const methodRegex = /def\s+(\w+)\s*\([^)]*\)/g;
+        let match;
+        
+        while ((match = methodRegex.exec(classBody)) !== null) {
+            const methodName = match[1];
+            // Skip special methods and get_queryset
+            if (!methodName.startsWith('__') && methodName !== 'get_queryset') {
+                methods.push(methodName);
+            }
+        }
+        
+        return methods;
     }
 
     private extractBaseClasses(code: string, modelName: string): string[] {

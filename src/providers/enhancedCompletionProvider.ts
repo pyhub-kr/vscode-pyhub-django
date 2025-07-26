@@ -65,7 +65,10 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
     }
 
     private async getManagerCompletions(linePrefix: string): Promise<vscode.CompletionItem[]> {
-        return DJANGO_QUERYSET_METHODS.map(method => {
+        const completions: vscode.CompletionItem[] = [];
+        
+        // Add standard QuerySet methods
+        const standardMethods = DJANGO_QUERYSET_METHODS.map(method => {
             const item = new vscode.CompletionItem(method.name, vscode.CompletionItemKind.Method);
             item.detail = method.signature;
             item.documentation = new vscode.MarkdownString(method.doc);
@@ -83,6 +86,31 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
             
             return item;
         });
+        completions.push(...standardMethods);
+        
+        // Try to extract custom manager methods
+        const managerMatch = linePrefix.match(/(\w+)\.(\w+)\.$/);
+        if (managerMatch) {
+            const modelName = managerMatch[1];
+            const managerName = managerMatch[2];
+            
+            const models = this.analyzer.getAllModels();
+            const model = models[modelName];
+            
+            if (model && model.managers) {
+                const manager = model.managers.find(m => m.name === managerName);
+                if (manager && manager.methods) {
+                    for (const methodName of manager.methods) {
+                        const item = new vscode.CompletionItem(methodName, vscode.CompletionItemKind.Method);
+                        item.detail = `Custom manager method`;
+                        item.insertText = new vscode.SnippetString(`${methodName}($0)`);
+                        completions.push(item);
+                    }
+                }
+            }
+        }
+        
+        return completions;
     }
 
     private async getFilterFieldCompletions(linePrefix: string): Promise<vscode.CompletionItem[]> {

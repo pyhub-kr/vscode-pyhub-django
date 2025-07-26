@@ -13,6 +13,7 @@ export interface FieldInfo {
 export interface ManagerInfo {
     name: string;
     type: string;
+    methods?: string[];
 }
 
 export interface ModelInfo {

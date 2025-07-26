@@ -4,6 +4,7 @@ import * as path from 'path';
 import { AdvancedModelAnalyzer } from '../../analyzers/advancedModelAnalyzer';
 import { EnhancedCompletionProvider } from '../../providers/enhancedCompletionProvider';
 import * as sinon from 'sinon';
+import { MockTextDocument } from '../utils/mockHelpers';
 
 suite('Advanced ORM Completion Test Suite', () => {
     let analyzer: AdvancedModelAnalyzer;
@@ -11,17 +12,8 @@ suite('Advanced ORM Completion Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
 
     // Helper to create mock documents
-    function createMockDocument(text: string): any {
-        return {
-            lineAt: (position: vscode.Position) => ({
-                text: text,
-                isEmptyOrWhitespace: text?.trim().length === 0,
-                firstNonWhitespaceCharacterIndex: text?.length - text?.trimStart().length || 0,
-                range: new vscode.Range(position.line, 0, position.line, text?.length || 0),
-                rangeIncludingLineBreak: new vscode.Range(position.line, 0, position.line, text?.length || 0)
-            }),
-            getText: () => text || ''
-        };
+    function createMockDocument(text: string): vscode.TextDocument {
+        return new MockTextDocument(text);
     }
 
     setup(() => {
@@ -63,6 +55,8 @@ class Article(models.Model):
         );
 
         const methodNames = completions.map(item => item.label);
+        
+        console.log('Completion items:', methodNames);
         
         // Should include standard QuerySet methods
         assert.ok(methodNames.includes('all'));
