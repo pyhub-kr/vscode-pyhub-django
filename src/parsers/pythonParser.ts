@@ -8,6 +8,7 @@ export interface FieldInfo {
     maxLength?: number;
     choices?: string[];
     default?: any;
+    relatedModel?: string;
 }
 
 export interface ManagerInfo {
@@ -119,6 +120,11 @@ export class PythonParser {
                 default: this.extractDefault(fieldArgs)
             };
             
+            // Extract related model for relationship fields
+            if (['ForeignKey', 'OneToOneField', 'ManyToManyField'].includes(fieldType)) {
+                field.relatedModel = this.extractRelatedModel(fieldArgs);
+            }
+            
             fields.push(field);
         }
         
@@ -187,6 +193,32 @@ export class PythonParser {
             
             return value;
         }
+        return undefined;
+    }
+
+    private extractRelatedModel(fieldArgs: string): string | undefined {
+        // Extract the first argument which is the related model
+        // Handle patterns like:
+        // ForeignKey('User', ...)
+        // ForeignKey(User, ...)
+        // ForeignKey('auth.User', ...)
+        
+        const patterns = [
+            /^['"]([^'"]+)['"]/,  // String literal
+            /^([A-Z]\w+)/,        // Direct class reference
+        ];
+        
+        const args = fieldArgs.trim();
+        for (const pattern of patterns) {
+            const match = args.match(pattern);
+            if (match) {
+                const modelRef = match[1];
+                // Extract just the model name from app.Model format
+                const parts = modelRef.split('.');
+                return parts[parts.length - 1];
+            }
+        }
+        
         return undefined;
     }
 

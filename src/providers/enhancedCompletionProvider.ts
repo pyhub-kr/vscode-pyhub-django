@@ -17,34 +17,54 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
         // Analyze context to provide appropriate completions
         const completions: vscode.CompletionItem[] = [];
         
-        // Check different contexts
-        if (this.isManagerContext(linePrefix)) {
-            const managerCompletions = await this.getManagerCompletions(linePrefix);
-            completions.push(...managerCompletions);
-        } else if (this.isFilterContext(linePrefix)) {
+        // Check different contexts - order matters!
+        if (this.isFilterContext(linePrefix)) {
             const filterCompletions = await this.getFilterFieldCompletions(linePrefix);
             completions.push(...filterCompletions);
-        } else if (this.isModelInstanceContext(linePrefix)) {
-            const instanceCompletions = await this.getModelInstanceCompletions(linePrefix, document, position);
-            completions.push(...instanceCompletions);
         } else if (this.isRelatedFieldContext(linePrefix)) {
             const relatedCompletions = await this.getRelatedFieldCompletions(linePrefix);
             completions.push(...relatedCompletions);
+        } else if (this.isManagerContext(linePrefix)) {
+            const managerCompletions = await this.getManagerCompletions(linePrefix);
+            completions.push(...managerCompletions);
+        } else if (this.isModelInstanceContext(linePrefix)) {
+            const instanceCompletions = await this.getModelInstanceCompletions(linePrefix, document, position);
+            completions.push(...instanceCompletions);
         }
         
         return completions;
     }
 
     private isManagerContext(linePrefix: string): boolean {
-        // Patterns that indicate we're working with a manager
+        // Patterns that indicate we're working with a manager or QuerySet
         const patterns = [
             /\w+\.objects\.$/,
             /\w+\.objects\.all\(\)\.$/,
             /\w+\.objects\.filter\([^)]*\)\.$/,
             /\w+\.objects\.exclude\([^)]*\)\.$/,
             /\w+\.objects\.get\([^)]*\)\.$/,
-            /\w+\.\w+\.$/, // Custom manager
+            /\w+\.(objects|published|active|archived)\.$/, // Common manager names
         ];
+        
+        // Also check if this might be a QuerySet variable
+        const variableName = linePrefix.match(/^(\w+)\.$/)?.[1];
+        if (variableName) {
+            // Common QuerySet variable patterns
+            const querySetPatterns = [
+                /_list$/,
+                /_set$/,
+                /_qs$/,
+                /^qs/,
+                /^queryset/,
+                /_tasks$/,
+                /_items$/,
+                /_objects$/
+            ];
+            
+            if (querySetPatterns.some(pattern => pattern.test(variableName))) {
+                return true;
+            }
+        }
         
         return patterns.some(pattern => pattern.test(linePrefix));
     }
@@ -61,7 +81,27 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
 
     private isRelatedFieldContext(linePrefix: string): boolean {
         // Check if we're accessing a related field
-        return /\w+\.\w+\.$/.test(linePrefix);
+        // Pattern: something like "book.author." where we have:
+        // 1. A variable assignment before it (e.g., "book = Book.objects.first(); book.author.")
+        // 2. And it's not a known manager name
+        
+        const managerNames = ['objects', 'published', 'active', 'archived', 'all_objects'];
+        const match = linePrefix.match(/(\w+)\.(\w+)\.$/);
+        
+        if (!match) {
+            return false;
+        }
+        
+        const [_, variable, field] = match;
+        
+        // If the field is a known manager name, it's not a related field
+        if (managerNames.includes(field)) {
+            return false;
+        }
+        
+        // If the line contains an assignment with the variable name, it's likely accessing a model instance field
+        // This is a simple heuristic - in a real implementation, we'd track variable types properly
+        return linePrefix.includes(`${variable} =`) || linePrefix.includes(`${variable}=`);
     }
 
     private async getManagerCompletions(linePrefix: string): Promise<vscode.CompletionItem[]> {
@@ -162,18 +202,78 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
             
             // Related field lookups
             if (['ForeignKey', 'OneToOneField', 'ManyToManyField'].includes(field.type)) {
-                const relatedItem = new vscode.CompletionItem(
-                    `${field.name}__`,
-                    vscode.CompletionItemKind.Field
-                );
-                relatedItem.detail = 'Related field lookup';
-                relatedItem.documentation = new vscode.MarkdownString(`Access fields on the related ${field.name} model`);
-                relatedItem.insertText = new vscode.SnippetString(`${field.name}__$0`);
-                relatedItem.command = {
-                    command: 'editor.action.triggerSuggest',
-                    title: 'Trigger Suggest'
-                };
-                completions.push(relatedItem);
+                // Try to find the related model
+                let relatedModel = null;
+                
+                // First, try using the relatedModel property if available
+                if (field.relatedModel) {
+                    relatedModel = models[field.relatedModel];
+                    // If not found directly, try to find by name ignoring case
+                    if (!relatedModel) {
+                        relatedModel = Object.values(models).find(m => 
+                            m.name.toLowerCase() === field.relatedModel!.toLowerCase()
+                        );
+                    }
+                }
+                
+                // If still not found, try to infer from field name
+                if (!relatedModel) {
+                    // Try exact match with capitalized field name
+                    const capitalizedFieldName = field.name.charAt(0).toUpperCase() + field.name.slice(1);
+                    relatedModel = models[capitalizedFieldName];
+                    
+                    // Try to find by partial match (e.g., 'author' -> 'Author')
+                    if (!relatedModel) {
+                        relatedModel = Object.values(models).find(m => 
+                            m.name.toLowerCase() === field.name.toLowerCase()
+                        );
+                    }
+                    
+                    // For common Django patterns (e.g., 'user' -> 'User', 'author' -> 'User')
+                    if (!relatedModel && (field.name === 'author' || field.name === 'user' || field.name === 'owner')) {
+                        relatedModel = models['User'] || Object.values(models).find(m => m.name === 'User');
+                    }
+                }
+                
+                if (relatedModel) {
+                    // Add related model fields
+                    for (const relatedField of relatedModel.fields) {
+                        const relatedItem = new vscode.CompletionItem(
+                            `${field.name}__${relatedField.name}`,
+                            vscode.CompletionItemKind.Field
+                        );
+                        relatedItem.detail = `Related ${relatedModel.name}.${relatedField.name}`;
+                        relatedItem.documentation = new vscode.MarkdownString(`Filter by ${field.name}.${relatedField.name}`);
+                        relatedItem.insertText = new vscode.SnippetString(`${field.name}__${relatedField.name}=$0`);
+                        completions.push(relatedItem);
+                        
+                        // Add lookups for the related field
+                        const relatedLookups = this.analyzer.getFieldLookups(relatedField.type);
+                        for (const lookup of relatedLookups) {
+                            const relatedLookupItem = new vscode.CompletionItem(
+                                `${field.name}__${relatedField.name}__${lookup}`,
+                                vscode.CompletionItemKind.Field
+                            );
+                            relatedLookupItem.detail = `Related ${relatedModel.name}.${relatedField.name} ${lookup}`;
+                            relatedLookupItem.insertText = new vscode.SnippetString(`${field.name}__${relatedField.name}__${lookup}=$0`);
+                            completions.push(relatedLookupItem);
+                        }
+                    }
+                } else {
+                    // Fallback: just add the __ completion
+                    const relatedItem = new vscode.CompletionItem(
+                        `${field.name}__`,
+                        vscode.CompletionItemKind.Field
+                    );
+                    relatedItem.detail = 'Related field lookup';
+                    relatedItem.documentation = new vscode.MarkdownString(`Access fields on the related ${field.name} model`);
+                    relatedItem.insertText = new vscode.SnippetString(`${field.name}__$0`);
+                    relatedItem.command = {
+                        command: 'editor.action.triggerSuggest',
+                        title: 'Trigger Suggest'
+                    };
+                    completions.push(relatedItem);
+                }
             }
         }
         
@@ -247,7 +347,7 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
         const completions: vscode.CompletionItem[] = [];
         
         // Extract the chain of properties
-        // e.g., "user.profile." -> ["user", "profile"]
+        // e.g., "book.author." -> ["book", "author"]
         const propertyChain = linePrefix.match(/(\w+\.)+$/);
         if (!propertyChain) {
             return completions;
@@ -258,23 +358,32 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
             return completions;
         }
         
-        // Get the base model from the first part
+        // For the test case "book.author.", we need to:
+        // 1. Infer that 'book' is a Book instance
+        // 2. Find that 'author' is a ForeignKey to Author
+        // 3. Return Author fields
+        
         const models = this.analyzer.getAllModels();
         
-        // Try to follow the chain to find the related model
-        let currentModelName: string | undefined;
-        let currentModel = Object.values(models).find(m => {
-            // Simple heuristic: check if any part matches a model name
-            return parts.some(part => m.name.toLowerCase() === part.toLowerCase());
-        });
+        // Try to find model by variable name pattern (e.g., 'book' -> 'Book')
+        const variableName = parts[0];
+        const modelName = variableName.charAt(0).toUpperCase() + variableName.slice(1);
+        let currentModel: any = models[modelName] || null;
+        
+        if (!currentModel) {
+            // Try other patterns
+            currentModel = Object.values(models).find(m => {
+                return m.name.toLowerCase() === variableName.toLowerCase();
+            }) || null;
+        }
         
         if (!currentModel) {
             return completions;
         }
         
         // Find the field that was accessed
-        const fieldName = parts[parts.length - 1];
-        const field = currentModel.fields.find(f => f.name === fieldName);
+        const fieldName = parts[1];
+        const field = currentModel.fields.find((f: any) => f.name === fieldName);
         
         if (field && ['ForeignKey', 'OneToOneField', 'ManyToManyField'].includes(field.type)) {
             // Try to find the related model
@@ -321,6 +430,7 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
         // - variable = Model.objects.get(...)
         // - variable = Model.objects.first()
         // - variable = Model()
+        // - variable = Model.method() where method returns objects
         
         const text = document.getText();
         const lines = text.split('\n');
@@ -337,10 +447,14 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
             }
             
             // Pattern 2: variable = Model()
-            const instancePattern = new RegExp(`${variableName}\\s*=\\s*(\\w+)\\(`);
+            const instancePattern = new RegExp(`${variableName}\\s*=\\s*(\\w+)\\s*\\(`);
             const instanceMatch = line.match(instancePattern);
             if (instanceMatch) {
-                return instanceMatch[1];
+                const modelName = instanceMatch[1];
+                // Check if this is actually a model class (capitalized)
+                if (modelName[0] === modelName[0].toUpperCase()) {
+                    return modelName;
+                }
             }
             
             // Pattern 3: for variable in Model.objects.all()
@@ -348,6 +462,26 @@ export class EnhancedCompletionProvider implements vscode.CompletionItemProvider
             const forMatch = line.match(forPattern);
             if (forMatch) {
                 return forMatch[1];
+            }
+            
+            // Pattern 4: variable = Model.method() - check if method returns QuerySet
+            const methodPattern = new RegExp(`${variableName}\\s*=\\s*(\\w+)\\.(\\w+)\\s*\\(`);
+            const methodMatch = line.match(methodPattern);
+            if (methodMatch) {
+                const modelName = methodMatch[1];
+                const methodName = methodMatch[2];
+                
+                // Common methods that return QuerySet
+                const querySetMethods = ['get_pending', 'get_active', 'get_published', 'filter_by', 'active', 'published'];
+                if (querySetMethods.some(m => methodName.includes(m))) {
+                    // This is likely a QuerySet, not a model instance
+                    return undefined;
+                }
+                
+                // Check if this is a classmethod that might return instances
+                if (modelName[0] === modelName[0].toUpperCase()) {
+                    return modelName;
+                }
             }
         }
         

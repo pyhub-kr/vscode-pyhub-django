@@ -332,8 +332,9 @@ export class DjangoProjectAnalyzer {
         try {
             const content = this.fileSystem.readFileSync(filePath, 'utf8') as string;
             
-            // URL 패턴 추출 (간단한 버전)
-            const pathRegex = /path\s*\(\s*['"]([^'"]+)['"]\s*,\s*([\w.]+)[^,)]*(?:,\s*name\s*=\s*['"]([^'"]+)['"])?\s*\)/g;
+            // URL 패턴 추출 - 개선된 정규식
+            // path() 및 re_path() 패턴 모두 처리
+            const pathRegex = /(?:path|re_path)\s*\(\s*r?['"]([^'"]*)['\"]\s*,\s*([^,\s]+(?:\.[^,\s]+)*)[^,)]*(?:,\s*name\s*=\s*['"]([^'"]+)['"])?\s*\)/g;
             let match;
             
             while ((match = pathRegex.exec(content)) !== null) {
@@ -341,7 +342,7 @@ export class DjangoProjectAnalyzer {
                 
                 const urlPattern: UrlPattern = {
                     pattern: pattern,
-                    view: view,
+                    view: view.trim(),
                     name: name
                 };
                 

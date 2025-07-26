@@ -94,6 +94,9 @@ export class AdvancedModelAnalyzer {
 
         // Add default Django model methods
         this.addDefaultDjangoMethods(enhanced);
+        
+        // Add inherited members from base classes
+        await this.addInheritedMembers(enhanced, code);
 
         return enhanced;
     }
@@ -102,7 +105,7 @@ export class AdvancedModelAnalyzer {
         const methods: ModelMethod[] = [];
         
         // Regex to find methods in the model class
-        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=class\\s+\\w+|$)`);
+        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=\\nclass\\s+\\w+|\\n\\n|$)`, 's');
         const classMatch = code.match(classRegex);
         
         if (!classMatch) {
@@ -111,8 +114,8 @@ export class AdvancedModelAnalyzer {
         
         const classBody = classMatch[1];
         
-        // Find methods
-        const methodRegex = /(?:@(\w+)\s+)?def\s+(\w+)\s*\(([^)]*)\)/g;
+        // Find methods - need to handle indented methods in Python
+        const methodRegex = /\s*(?:@(\w+)\s+)?def\s+(\w+)\s*\(([^)]*)\)/g;
         let match;
         
         while ((match = methodRegex.exec(classBody)) !== null) {
@@ -142,7 +145,7 @@ export class AdvancedModelAnalyzer {
     private extractProperties(code: string, modelName: string): string[] {
         const properties: string[] = [];
         
-        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=class\\s+\\w+|$)`);
+        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=\\nclass\\s+\\w+|\\n\\n|$)`, 's');
         const classMatch = code.match(classRegex);
         
         if (!classMatch) {
@@ -151,8 +154,8 @@ export class AdvancedModelAnalyzer {
         
         const classBody = classMatch[1];
         
-        // Find @property decorated methods
-        const propertyRegex = /@property\s+def\s+(\w+)\s*\(/g;
+        // Find @property decorated methods - handle indentation
+        const propertyRegex = /^\s*@property\s+def\s+(\w+)\s*\(/gm;
         let match;
         
         while ((match = propertyRegex.exec(classBody)) !== null) {
@@ -167,7 +170,7 @@ export class AdvancedModelAnalyzer {
             { name: 'objects', type: 'Manager', methods: [] } // Default manager
         ];
         
-        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=class\\s+\\w+|$)`);
+        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=\\nclass\\s+\\w+|\\n\\n|$)`, 's');
         const classMatch = code.match(classRegex);
         
         if (!classMatch) {
@@ -235,7 +238,7 @@ export class AdvancedModelAnalyzer {
     }
 
     private checkIfAbstract(code: string, modelName: string): boolean {
-        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=class\\s+\\w+|$)`);
+        const classRegex = new RegExp(`class\\s+${modelName}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=\\nclass\\s+\\w+|\\n\\n|$)`, 's');
         const classMatch = code.match(classRegex);
         
         if (!classMatch) {
@@ -249,9 +252,15 @@ export class AdvancedModelAnalyzer {
     private extractRelations(model: EnhancedModelInfo): void {
         for (const field of model.fields) {
             if (['ForeignKey', 'OneToOneField', 'ManyToManyField'].includes(field.type)) {
+                // If the field already has relatedModel from parsing, use it
+                if (!field.relatedModel) {
+                    const relatedModel = this.extractRelatedModel(field);
+                    field.relatedModel = relatedModel;
+                }
+                
                 const relation: ModelRelation = {
                     fromModel: model.name,
-                    toModel: this.extractRelatedModel(field),
+                    toModel: field.relatedModel || 'UnknownModel',
                     fieldName: field.name,
                     relationType: field.type as any,
                     relatedName: this.extractRelatedName(field)
@@ -333,6 +342,51 @@ export class AdvancedModelAnalyzer {
             return [];
         }
         return paramsMatch[1].split(',').map(p => p.trim()).filter(p => p);
+    }
+
+    private async addInheritedMembers(model: EnhancedModelInfo, code: string): Promise<void> {
+        // Look for base classes in the same file
+        for (const baseClass of model.baseClasses) {
+            // Skip Django's built-in model classes
+            if (baseClass === 'models.Model' || baseClass === 'Model') {
+                continue;
+            }
+            
+            // Try to find the base class in the same file
+            const baseClassRegex = new RegExp(`class\\s+${baseClass}\\s*\\([^)]*\\)\\s*:([\\s\\S]*?)(?=\\nclass\\s+\\w+|\\n\\n|$)`, 's');
+            const baseClassMatch = code.match(baseClassRegex);
+            
+            if (baseClassMatch) {
+                // Parse fields from base class
+                const parseResult = await this.parser.parseModelFile(code, 'temp.py');
+                const baseModel = parseResult.models.find((m: ModelInfo) => m.name === baseClass);
+                
+                if (baseModel) {
+                    // Add fields from base class if not already present
+                    for (const baseField of baseModel.fields) {
+                        if (!model.fields.some(f => f.name === baseField.name)) {
+                            model.fields.push(baseField);
+                        }
+                    }
+                }
+                
+                // Extract and add methods from base class
+                const baseMethods = this.extractMethods(code, baseClass);
+                for (const baseMethod of baseMethods) {
+                    if (!model.methods.some(m => m.name === baseMethod.name)) {
+                        model.methods.push(baseMethod);
+                    }
+                }
+                
+                // Extract and add properties from base class
+                const baseProperties = this.extractProperties(code, baseClass);
+                for (const baseProp of baseProperties) {
+                    if (!model.properties.includes(baseProp)) {
+                        model.properties.push(baseProp);
+                    }
+                }
+            }
+        }
     }
 
     getAllModels(): { [key: string]: EnhancedModelInfo } {

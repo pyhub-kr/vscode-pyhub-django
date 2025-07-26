@@ -36,7 +36,7 @@ export class UrlTagCompletionProvider implements vscode.CompletionItemProvider {
             if (/\{%\s*url\s+['"]?$/.test(linePrefix)) {
                 return true;
             }
-            // <a href="{% url 'name' %}">
+            // <a href="{% url 'name' %}"> - in the middle of typing the URL name
             if (/\{%\s*url\s+['"][^'"]*$/.test(linePrefix)) {
                 return true;
             }

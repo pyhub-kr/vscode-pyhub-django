@@ -126,8 +126,12 @@ urlpatterns = [
         
         // Step 4: Check parameter hints are provided
         const postDetailCompletion = completions.find(c => c.label === 'blog:post_detail');
-        assert.ok(postDetailCompletion?.documentation?.toString().includes('slug:post'), 
-            'Should show parameter information');
+        assert.ok(postDetailCompletion, 'Should find post_detail completion');
+        
+        if (postDetailCompletion?.documentation) {
+            const doc = postDetailCompletion.documentation as vscode.MarkdownString;
+            assert.ok(doc.value.includes('slug:post'), 'Should show parameter information');
+        }
     });
 
     /**

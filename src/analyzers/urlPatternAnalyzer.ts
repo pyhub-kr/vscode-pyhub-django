@@ -67,7 +67,9 @@ export class UrlPatternAnalyzer {
 
         // Parse path() and re_path() patterns
         // This regex handles multi-line patterns and various formats
-        const pathRegex = /(?:path|re_path)\s*\(\s*r?['"]([^'"]*)['\"]\s*,\s*([^,\)]+?)(?:\s*,\s*name\s*=\s*['"]([^'"]+)['"])?\s*\)/g;
+        // Updated to handle class-based views with .as_view()
+        // Using a more specific approach to handle nested parentheses
+        const pathRegex = /(?:path|re_path)\s*\(\s*r?['"]([^'"]*)['\"]\s*,\s*([^,]+(?:\([^)]*\))?[^,]*)(?:\s*,\s*name\s*=\s*['"]([^'"]+)['"])?\s*\)/g;
         
         let match;
         while ((match = pathRegex.exec(content)) !== null) {
