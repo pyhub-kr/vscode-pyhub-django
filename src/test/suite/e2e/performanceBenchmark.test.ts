@@ -4,6 +4,7 @@ import { AdvancedModelAnalyzer } from '../../../analyzers/advancedModelAnalyzer'
 import { EnhancedCompletionProvider } from '../../../providers/enhancedCompletionProvider';
 import { UrlPatternAnalyzer } from '../../../analyzers/urlPatternAnalyzer';
 import { UrlTagCompletionProvider } from '../../../providers/urlTagCompletionProvider';
+import { MockTextDocument } from '../../utils/mockHelpers';
 
 suite('E2E - Performance Benchmarks', () => {
     const PERFORMANCE_THRESHOLD = 100; // 100ms threshold for auto-completion
@@ -27,10 +28,7 @@ class LargeModel(models.Model):
         await analyzer.analyzeModelCode(modelCode, 'test/models.py');
         
         // Measure completion time
-        const document = {
-            languageId: 'python',
-            lineAt: () => ({ text: 'model = LargeModel(); model.' })
-        } as any;
+        const document = new MockTextDocument('model = LargeModel(); model.', 'python');
         
         const position = new vscode.Position(0, 28);
         
@@ -66,10 +64,7 @@ urlpatterns = [
         await analyzer.analyzeUrlFile(urlsCode, 'test/urls.py');
         
         // Measure completion time
-        const document = {
-            languageId: 'django-html',
-            lineAt: () => ({ text: "{% url '" })
-        } as any;
+        const document = new MockTextDocument("{% url '", 'django-html');
         
         const position = new vscode.Position(0, 8);
         

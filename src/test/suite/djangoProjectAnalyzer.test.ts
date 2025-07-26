@@ -4,14 +4,17 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DjangoProjectAnalyzer } from '../../analyzers/djangoProjectAnalyzer';
 import * as sinon from 'sinon';
+import { InMemoryFileSystem, createMockWorkspaceFolder } from '../utils/mockHelpers';
 
 suite('Django Project Analyzer Test Suite', () => {
     let analyzer: DjangoProjectAnalyzer;
     let sandbox: sinon.SinonSandbox;
+    let mockFileSystem: InMemoryFileSystem;
 
     setup(() => {
         sandbox = sinon.createSandbox();
-        analyzer = new DjangoProjectAnalyzer();
+        mockFileSystem = new InMemoryFileSystem();
+        analyzer = new DjangoProjectAnalyzer(mockFileSystem);
     });
 
     teardown(() => {
@@ -19,14 +22,12 @@ suite('Django Project Analyzer Test Suite', () => {
     });
 
     test('should detect Django project with manage.py in root', async () => {
-        const testWorkspaceFolder: vscode.WorkspaceFolder = {
-            uri: vscode.Uri.file('/test/django/project'),
-            name: 'test-project',
-            index: 0
-        };
+        const testWorkspaceFolder = createMockWorkspaceFolder('/test/django/project', 'test-project');
 
+        // Setup mock file system
+        mockFileSystem.writeFileSync('/test/django/project/manage.py', '#!/usr/bin/env python');
+        
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
-        sandbox.stub(fs, 'existsSync').withArgs('/test/django/project/manage.py').returns(true);
 
         const result = await analyzer.initialize();
 
@@ -35,14 +36,10 @@ suite('Django Project Analyzer Test Suite', () => {
     });
 
     test('should return false when no Django project is found', async () => {
-        const testWorkspaceFolder: vscode.WorkspaceFolder = {
-            uri: vscode.Uri.file('/test/non-django/project'),
-            name: 'test-project',
-            index: 0
-        };
+        const testWorkspaceFolder = createMockWorkspaceFolder('/test/non-django/project', 'test-project');
 
+        // No manage.py file in the mock file system
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
-        sandbox.stub(fs, 'existsSync').returns(false);
 
         const result = await analyzer.initialize();
 
@@ -68,15 +65,12 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 `;
 
-        sandbox.stub(fs, 'readFileSync').returns(modelContent);
-        sandbox.stub(fs, 'existsSync').returns(true);
+        // Setup mock file system with Django project structure
+        mockFileSystem.writeFileSync('/test/django/project/manage.py', '#!/usr/bin/env python');
+        mockFileSystem.writeFileSync('/test/django/project/myapp/models.py', modelContent);
         
         // Mock workspace setup
-        const testWorkspaceFolder: vscode.WorkspaceFolder = {
-            uri: vscode.Uri.file('/test/django/project'),
-            name: 'test-project',
-            index: 0
-        };
+        const testWorkspaceFolder = createMockWorkspaceFolder('/test/django/project', 'test-project');
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
         
         await analyzer.initialize();
@@ -108,15 +102,12 @@ urlpatterns = [
 ]
 `;
 
-        sandbox.stub(fs, 'readFileSync').returns(urlsContent);
-        sandbox.stub(fs, 'existsSync').returns(true);
+        // Setup mock file system
+        mockFileSystem.writeFileSync('/test/django/project/manage.py', '#!/usr/bin/env python');
+        mockFileSystem.writeFileSync('/test/django/project/myapp/urls.py', urlsContent);
         
         // Mock workspace setup
-        const testWorkspaceFolder: vscode.WorkspaceFolder = {
-            uri: vscode.Uri.file('/test/django/project'),
-            name: 'test-project',
-            index: 0
-        };
+        const testWorkspaceFolder = createMockWorkspaceFolder('/test/django/project', 'test-project');
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
         
         await analyzer.initialize();
@@ -124,12 +115,13 @@ urlpatterns = [
 
         const patterns = await analyzer.getUrlPatterns();
         
+        console.log('Found URL patterns:', patterns);
         assert.strictEqual(patterns.length, 3);
         
         const indexPattern = patterns.find(p => p.name === 'index');
         assert.ok(indexPattern);
         assert.strictEqual(indexPattern.pattern, '');
-        assert.strictEqual(indexPattern.view, 'index');
+        assert.strictEqual(indexPattern.view, 'views.index');
     });
 
     test('should extract installed apps from settings file', async () => {
@@ -155,19 +147,16 @@ MIDDLEWARE = [
 ]
 `;
 
-        sandbox.stub(fs, 'readFileSync').returns(settingsContent);
-        sandbox.stub(fs, 'existsSync').returns(true);
+        // Setup mock file system
+        mockFileSystem.writeFileSync('/test/django/project/manage.py', '#!/usr/bin/env python');
+        mockFileSystem.writeFileSync('/test/django/project/myproject/settings.py', settingsContent);
         
         // Mock workspace setup
-        const testWorkspaceFolder: vscode.WorkspaceFolder = {
-            uri: vscode.Uri.file('/test/django/project'),
-            name: 'test-project',
-            index: 0
-        };
+        const testWorkspaceFolder = createMockWorkspaceFolder('/test/django/project', 'test-project');
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
         
         await analyzer.initialize();
-        await (analyzer as any).analyzeSettings('/test/django/project/settings.py');
+        await (analyzer as any).analyzeSettings('/test/django/project/myproject/settings.py');
 
         const installedApps = analyzer.getInstalledApps();
         
@@ -194,18 +183,12 @@ class User(models.Model):
     email = models.EmailField()
 `;
 
-        const readStub = sandbox.stub(fs, 'readFileSync');
-        readStub.onFirstCall().returns(initialModelContent);
-        readStub.onSecondCall().returns(updatedModelContent);
-        
-        sandbox.stub(fs, 'existsSync').returns(true);
+        // Setup mock file system with initial content
+        mockFileSystem.writeFileSync('/test/django/project/manage.py', '#!/usr/bin/env python');
+        mockFileSystem.writeFileSync('/test/django/project/myapp/models.py', initialModelContent);
         
         // Mock workspace setup
-        const testWorkspaceFolder: vscode.WorkspaceFolder = {
-            uri: vscode.Uri.file('/test/django/project'),
-            name: 'test-project',
-            index: 0
-        };
+        const testWorkspaceFolder = createMockWorkspaceFolder('/test/django/project', 'test-project');
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
         
         await analyzer.initialize();
@@ -215,7 +198,8 @@ class User(models.Model):
         let models = await analyzer.getModelInfo();
         assert.strictEqual(models['User'].fields.length, 1);
         
-        // Simulate file change
+        // Simulate file change by updating the mock file system
+        mockFileSystem.writeFileSync('/test/django/project/myapp/models.py', updatedModelContent);
         await (analyzer as any).onPythonFileChanged(vscode.Uri.file('/test/django/project/myapp/models.py'));
         
         // Check updated model

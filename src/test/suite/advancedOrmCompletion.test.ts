@@ -326,13 +326,16 @@ class Task(models.Model):
             'pending_tasks.'
         ];
         const document = {
-            lineAt: (line: number) => ({
-                text: lines[line],
-                isEmptyOrWhitespace: lines[line].trim().length === 0,
-                firstNonWhitespaceCharacterIndex: lines[line].length - lines[line].trimStart().length,
-                range: new vscode.Range(line, 0, line, lines[line].length),
-                rangeIncludingLineBreak: new vscode.Range(line, 0, line, lines[line].length)
-            }),
+            lineAt: (line: number) => {
+                const text = lines[line] || '';
+                return {
+                    text: text,
+                    isEmptyOrWhitespace: text.trim().length === 0,
+                    firstNonWhitespaceCharacterIndex: text.length - text.trimStart().length,
+                    range: new vscode.Range(line, 0, line, text.length),
+                    rangeIncludingLineBreak: new vscode.Range(line, 0, line, text.length)
+                };
+            },
             getText: () => lines.join('\n'),
             lineCount: lines.length
         } as any;

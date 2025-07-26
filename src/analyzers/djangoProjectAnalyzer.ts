@@ -4,6 +4,14 @@ import * as fs from 'fs';
 import { AdvancedModelAnalyzer } from './advancedModelAnalyzer';
 import { PythonParser } from '../parsers/pythonParser';
 
+// FileSystem interface for dependency injection
+export interface FileSystem {
+    existsSync(path: string): boolean;
+    readFileSync(path: string, encoding?: string): string | Buffer;
+    readdirSync(path: string): string[];
+    statSync(path: string): fs.Stats;
+}
+
 interface ModelField {
     name: string;
     type: string;
@@ -32,8 +40,15 @@ export class DjangoProjectAnalyzer {
     private settingsCache: any = {};
     private advancedAnalyzer: AdvancedModelAnalyzer;
     private pythonParser: PythonParser;
+    private fileSystem: FileSystem;
 
-    constructor() {
+    constructor(fileSystem?: FileSystem) {
+        this.fileSystem = fileSystem || {
+            existsSync: fs.existsSync,
+            readFileSync: (path: string, encoding?: string) => fs.readFileSync(path, (encoding || 'utf8') as BufferEncoding),
+            readdirSync: fs.readdirSync,
+            statSync: fs.statSync
+        };
         this.advancedAnalyzer = new AdvancedModelAnalyzer();
         this.pythonParser = new PythonParser();
         this.initializeWatchers();
@@ -69,7 +84,7 @@ export class DjangoProjectAnalyzer {
         ];
 
         for (const managePath of possiblePaths) {
-            if (fs.existsSync(managePath)) {
+            if (this.fileSystem.existsSync(managePath)) {
                 return managePath;
             }
         }
@@ -174,7 +189,7 @@ export class DjangoProjectAnalyzer {
         possiblePaths.push(path.join(this.projectRoot, projectName, 'settings.py'));
 
         for (const settingsPath of possiblePaths) {
-            if (fs.existsSync(settingsPath)) {
+            if (this.fileSystem.existsSync(settingsPath)) {
                 return settingsPath;
             }
         }
@@ -186,15 +201,24 @@ export class DjangoProjectAnalyzer {
 
     private async analyzeSettings(settingsPath: string): Promise<void> {
         try {
-            const content = fs.readFileSync(settingsPath, 'utf8');
+            const content = this.fileSystem.readFileSync(settingsPath, 'utf8') as string;
             
             // INSTALLED_APPS 추출
             const installedAppsMatch = content.match(/INSTALLED_APPS\s*=\s*\[([\s\S]*?)\]/);
             if (installedAppsMatch) {
                 const apps = installedAppsMatch[1]
-                    .split(',')
-                    .map(app => app.trim().replace(/['"]/g, ''))
-                    .filter(app => app && !app.startsWith('#'));
+                    .split('\n')
+                    .map(line => {
+                        // Remove comments
+                        const commentIndex = line.indexOf('#');
+                        if (commentIndex >= 0) {
+                            line = line.substring(0, commentIndex);
+                        }
+                        return line.trim();
+                    })
+                    .filter(line => line && line !== ',')
+                    .map(line => line.replace(/['"]/g, '').replace(/,$/, ''))
+                    .filter(app => app);
                 
                 this.settingsCache.installedApps = apps;
             }
@@ -226,7 +250,7 @@ export class DjangoProjectAnalyzer {
 
     private async analyzeModels(filePath: string): Promise<void> {
         try {
-            const content = fs.readFileSync(filePath, 'utf8');
+            const content = this.fileSystem.readFileSync(filePath, 'utf8') as string;
             
             // Use advanced analyzer
             await this.advancedAnalyzer.analyzeModelCode(content, filePath);
@@ -306,10 +330,10 @@ export class DjangoProjectAnalyzer {
 
     private async analyzeUrls(filePath: string): Promise<void> {
         try {
-            const content = fs.readFileSync(filePath, 'utf8');
+            const content = this.fileSystem.readFileSync(filePath, 'utf8') as string;
             
             // URL 패턴 추출 (간단한 버전)
-            const pathRegex = /path\s*\(\s*['"]([^'"]+)['"]\s*,\s*(\w+)[^,)]*(?:,\s*name\s*=\s*['"]([^'"]+)['"])?\s*\)/g;
+            const pathRegex = /path\s*\(\s*['"]([^'"]+)['"]\s*,\s*([\w.]+)[^,)]*(?:,\s*name\s*=\s*['"]([^'"]+)['"])?\s*\)/g;
             let match;
             
             while ((match = pathRegex.exec(content)) !== null) {
@@ -321,9 +345,9 @@ export class DjangoProjectAnalyzer {
                     name: name
                 };
                 
-                if (name) {
-                    this.urlPatternCache.set(name, urlPattern);
-                }
+                // Store all patterns, using pattern as key if no name
+                const key = name || `${pattern}_${view}`;
+                this.urlPatternCache.set(key, urlPattern);
                 
                 console.log(`URL pattern analyzed: ${pattern} -> ${view}`);
             }
