@@ -1,9 +1,14 @@
+import { injectable, inject } from 'inversify';
 import * as vscode from 'vscode';
 import { AdvancedModelAnalyzer } from '../analyzers/advancedModelAnalyzer';
 import { DJANGO_QUERYSET_METHODS, DJANGO_MODEL_METHODS, DJANGO_MODEL_PROPERTIES } from '../data/djangoMethods';
+import { TYPES } from '../container/types';
 
+@injectable()
 export class EnhancedCompletionProvider implements vscode.CompletionItemProvider {
-    constructor(private analyzer: AdvancedModelAnalyzer) {}
+    constructor(
+        @inject(TYPES.AdvancedModelAnalyzer) private analyzer: AdvancedModelAnalyzer
+    ) {}
 
     async provideCompletionItems(
         document: vscode.TextDocument,

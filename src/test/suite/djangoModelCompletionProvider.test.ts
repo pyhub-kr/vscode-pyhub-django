@@ -2,7 +2,9 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 import { DjangoModelCompletionProvider, DjangoFieldCompletionProvider } from '../../providers/djangoModelCompletionProvider';
 import { DjangoProjectAnalyzer } from '../../analyzers/djangoProjectAnalyzer';
+import { AdvancedModelAnalyzer } from '../../analyzers/advancedModelAnalyzer';
 import * as sinon from 'sinon';
+import { createTestDjangoProjectAnalyzer } from '../container/testContainer';
 
 suite('Django Model Completion Provider Test Suite', () => {
     let modelCompletionProvider: DjangoModelCompletionProvider;
@@ -12,7 +14,7 @@ suite('Django Model Completion Provider Test Suite', () => {
 
     setup(() => {
         sandbox = sinon.createSandbox();
-        analyzer = new DjangoProjectAnalyzer();
+        analyzer = createTestDjangoProjectAnalyzer();
         modelCompletionProvider = new DjangoModelCompletionProvider(analyzer);
         fieldCompletionProvider = new DjangoFieldCompletionProvider();
     });

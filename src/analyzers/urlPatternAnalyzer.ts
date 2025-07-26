@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import * as vscode from 'vscode';
 import * as path from 'path';
 
@@ -16,6 +17,7 @@ interface FileCache {
     patterns: UrlPattern[];
 }
 
+@injectable()
 export class UrlPatternAnalyzer {
     private urlPatterns: Map<string, UrlPattern> = new Map();
     private fileCache: Map<string, FileCache> = new Map();

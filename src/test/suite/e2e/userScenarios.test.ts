@@ -9,6 +9,7 @@ import { UrlPatternAnalyzer } from '../../../analyzers/urlPatternAnalyzer';
 import { UrlTagCompletionProvider } from '../../../providers/urlTagCompletionProvider';
 import { ManagePyCommandHandler } from '../../../commands/managePyCommandHandler';
 import { PythonExecutor, PythonIntegration } from '../../../pythonIntegration';
+import { createTestDjangoProjectAnalyzer } from '../../container/testContainer';
 
 /**
  * User Scenario-based End-to-End Tests
@@ -34,7 +35,7 @@ suite('E2E - User Scenarios', () => {
     test('Scenario: New developer opens Django project', async () => {
         // Step 1: Open Django project
         const projectPath = path.join(__dirname, '../../../../test/fixtures/sample-projects/simple-blog');
-        const analyzer = new DjangoProjectAnalyzer();
+        const analyzer = createTestDjangoProjectAnalyzer();
         
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([{
             uri: vscode.Uri.file(projectPath),
@@ -191,7 +192,7 @@ Available subcommands:
      */
     test('Scenario: Full-stack developer workflow', async () => {
         // Initialize all analyzers
-        const projectAnalyzer = new DjangoProjectAnalyzer();
+        const projectAnalyzer = createTestDjangoProjectAnalyzer();
         const modelAnalyzer = new AdvancedModelAnalyzer();
         const urlAnalyzer = new UrlPatternAnalyzer();
         

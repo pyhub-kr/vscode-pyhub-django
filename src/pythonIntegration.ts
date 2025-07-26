@@ -1,4 +1,6 @@
+import { injectable, inject } from 'inversify';
 import * as vscode from 'vscode';
+import { TYPES } from './container/types';
 
 // Python Extension API 타입 정의
 interface PythonExtensionAPI {
@@ -9,11 +11,14 @@ interface PythonExtensionAPI {
     };
 }
 
+@injectable()
 export class PythonIntegration {
     private pythonApi: PythonExtensionAPI | undefined;
     private disposables: vscode.Disposable[] = [];
 
-    constructor(private context: vscode.ExtensionContext) {}
+    constructor(
+        @inject(TYPES.ExtensionContext) private context: vscode.ExtensionContext
+    ) {}
 
     async initialize(): Promise<boolean> {
         try {
@@ -90,8 +95,11 @@ export class PythonIntegration {
 }
 
 // Python 프로세스 실행 헬퍼
+@injectable()
 export class PythonExecutor {
-    constructor(private pythonIntegration: PythonIntegration) {}
+    constructor(
+        @inject(TYPES.PythonIntegration) private pythonIntegration: PythonIntegration
+    ) {}
 
     getCurrentPythonPath(): string | undefined {
         return this.pythonIntegration.getCurrentPythonPath();

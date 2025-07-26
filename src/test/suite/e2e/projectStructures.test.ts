@@ -3,8 +3,10 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as sinon from 'sinon';
 import { DjangoProjectAnalyzer } from '../../../analyzers/djangoProjectAnalyzer';
+import { AdvancedModelAnalyzer } from '../../../analyzers/advancedModelAnalyzer';
 import { UrlPatternAnalyzer } from '../../../analyzers/urlPatternAnalyzer';
 import { ProjectPathConfigurator } from '../../../projectPathConfigurator';
+import { createTestDjangoProjectAnalyzer } from '../../container/testContainer';
 
 suite('E2E - Different Project Structures', () => {
     let sandbox: sinon.SinonSandbox;
@@ -20,7 +22,7 @@ suite('E2E - Different Project Structures', () => {
 
     test('should handle simple blog project structure', async () => {
         const projectPath = path.join(fixturesPath, 'simple-blog');
-        const analyzer = new DjangoProjectAnalyzer();
+        const analyzer = createTestDjangoProjectAnalyzer();
         
         // Mock workspace to point to our test project
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([{

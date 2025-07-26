@@ -3,7 +3,9 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { ProjectPathConfigurator } from '../../projectPathConfigurator';
 import { DjangoProjectAnalyzer } from '../../analyzers/djangoProjectAnalyzer';
+import { AdvancedModelAnalyzer } from '../../analyzers/advancedModelAnalyzer';
 import * as sinon from 'sinon';
+import { createTestDjangoProjectAnalyzer } from '../container/testContainer';
 
 suite('Integration Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
@@ -15,7 +17,7 @@ suite('Integration Test Suite', () => {
     setup(() => {
         sandbox = sinon.createSandbox();
         pathConfigurator = new ProjectPathConfigurator();
-        projectAnalyzer = new DjangoProjectAnalyzer();
+        projectAnalyzer = createTestDjangoProjectAnalyzer();
     });
 
     teardown(() => {

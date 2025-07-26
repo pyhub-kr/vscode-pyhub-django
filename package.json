@@ -142,5 +142,9 @@
   },
   "extensionDependencies": [
     "ms-python.python"
-  ]
+  ],
+  "dependencies": {
+    "inversify": "^7.6.1",
+    "reflect-metadata": "^0.2.2"
+  }
 }

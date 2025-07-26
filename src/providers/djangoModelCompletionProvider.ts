@@ -1,8 +1,13 @@
+import { injectable, inject } from 'inversify';
 import * as vscode from 'vscode';
 import { DjangoProjectAnalyzer } from '../analyzers/djangoProjectAnalyzer';
+import { TYPES } from '../container/types';
 
+@injectable()
 export class DjangoModelCompletionProvider implements vscode.CompletionItemProvider {
-    constructor(private analyzer: DjangoProjectAnalyzer) {}
+    constructor(
+        @inject(TYPES.DjangoProjectAnalyzer) private analyzer: DjangoProjectAnalyzer
+    ) {}
 
     async provideCompletionItems(
         document: vscode.TextDocument,
@@ -134,6 +139,7 @@ export class DjangoModelCompletionProvider implements vscode.CompletionItemProvi
 }
 
 // Django 필드 타입 자동 완성을 위한 헬퍼
+@injectable()
 export class DjangoFieldCompletionProvider implements vscode.CompletionItemProvider {
     async provideCompletionItems(
         document: vscode.TextDocument,

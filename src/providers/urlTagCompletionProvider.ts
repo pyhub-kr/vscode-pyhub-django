@@ -1,8 +1,13 @@
+import { injectable, inject } from 'inversify';
 import * as vscode from 'vscode';
 import { UrlPatternAnalyzer, UrlPattern } from '../analyzers/urlPatternAnalyzer';
+import { TYPES } from '../container/types';
 
+@injectable()
 export class UrlTagCompletionProvider implements vscode.CompletionItemProvider {
-    constructor(private analyzer: UrlPatternAnalyzer) {}
+    constructor(
+        @inject(TYPES.UrlPatternAnalyzer) private analyzer: UrlPatternAnalyzer
+    ) {}
 
     async provideCompletionItems(
         document: vscode.TextDocument,

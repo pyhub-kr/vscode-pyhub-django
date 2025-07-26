@@ -3,8 +3,10 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { DjangoProjectAnalyzer } from '../../analyzers/djangoProjectAnalyzer';
+import { AdvancedModelAnalyzer } from '../../analyzers/advancedModelAnalyzer';
 import * as sinon from 'sinon';
 import { InMemoryFileSystem, createMockWorkspaceFolder } from '../utils/mockHelpers';
+import { createTestDjangoProjectAnalyzer } from '../container/testContainer';
 
 suite('Django Project Analyzer Test Suite', () => {
     let analyzer: DjangoProjectAnalyzer;
@@ -14,7 +16,7 @@ suite('Django Project Analyzer Test Suite', () => {
     setup(() => {
         sandbox = sinon.createSandbox();
         mockFileSystem = new InMemoryFileSystem();
-        analyzer = new DjangoProjectAnalyzer(mockFileSystem);
+        analyzer = createTestDjangoProjectAnalyzer(mockFileSystem);
     });
 
     teardown(() => {

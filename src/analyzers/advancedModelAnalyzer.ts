@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { PythonParser, ModelInfo, FieldInfo, ManagerInfo } from '../parsers/pythonParser';
@@ -33,6 +34,7 @@ interface EnhancedModelInfo {
     relations: ModelRelation[];
 }
 
+@injectable()
 export class AdvancedModelAnalyzer {
     private models: Map<string, EnhancedModelInfo> = new Map();
     private relations: ModelRelation[] = [];

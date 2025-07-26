@@ -1,7 +1,9 @@
+import { injectable } from 'inversify';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
+@injectable()
 export class ProjectPathConfigurator {
     private readonly configSection = 'python';
     private readonly extraPathsKey = 'analysis.extraPaths';

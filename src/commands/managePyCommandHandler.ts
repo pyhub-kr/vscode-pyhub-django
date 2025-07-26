@@ -1,6 +1,8 @@
+import { injectable, inject } from 'inversify';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { PythonExecutor } from '../pythonIntegration';
+import { TYPES } from '../container/types';
 
 interface CommandInfo {
     name: string;
@@ -16,6 +18,7 @@ interface CommandHistoryItem {
     timestamp: Date;
 }
 
+@injectable()
 export class ManagePyCommandHandler {
     private runserverTerminal: vscode.Terminal | undefined;
     private commandsTerminal: vscode.Terminal | undefined;
@@ -94,7 +97,9 @@ export class ManagePyCommandHandler {
         }
     };
 
-    constructor(private pythonExecutor: PythonExecutor) {}
+    constructor(
+        @inject(TYPES.PythonExecutor) private pythonExecutor: PythonExecutor
+    ) {}
 
     async getAvailableCommands(): Promise<string[]> {
         if (this.availableCommands.length > 0) {

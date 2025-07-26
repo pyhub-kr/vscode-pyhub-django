@@ -1,8 +1,10 @@
+import { injectable, inject } from 'inversify';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { AdvancedModelAnalyzer } from './advancedModelAnalyzer';
 import { PythonParser } from '../parsers/pythonParser';
+import { TYPES } from '../container/types';
 
 // FileSystem interface for dependency injection
 export interface FileSystem {
@@ -33,6 +35,7 @@ interface UrlPattern {
     view: string;
 }
 
+@injectable()
 export class DjangoProjectAnalyzer {
     private projectRoot: string | undefined;
     private modelCache: Map<string, ModelInfo> = new Map();
@@ -42,14 +45,17 @@ export class DjangoProjectAnalyzer {
     private pythonParser: PythonParser;
     private fileSystem: FileSystem;
 
-    constructor(fileSystem?: FileSystem) {
+    constructor(
+        @inject(TYPES.AdvancedModelAnalyzer) advancedAnalyzer: AdvancedModelAnalyzer,
+        fileSystem?: FileSystem
+    ) {
         this.fileSystem = fileSystem || {
             existsSync: fs.existsSync,
             readFileSync: (path: string, encoding?: string) => fs.readFileSync(path, (encoding || 'utf8') as BufferEncoding),
             readdirSync: fs.readdirSync,
             statSync: fs.statSync
         };
-        this.advancedAnalyzer = new AdvancedModelAnalyzer();
+        this.advancedAnalyzer = advancedAnalyzer;
         this.pythonParser = new PythonParser();
         this.initializeWatchers();
     }
