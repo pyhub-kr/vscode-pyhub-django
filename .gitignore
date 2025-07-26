@@ -7,3 +7,15 @@ node_modules
 .env
 *.log
 _backup/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
