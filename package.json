@@ -117,7 +117,6 @@
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
     "test:coverage": "nyc npm test",
-    "test:unit": "npm run compile && mocha out/test/suite/*.test.js",
     "package": "vsce package",
     "publish": "vsce publish",
     "deploy": "npm run test && npm run package && npm run publish"

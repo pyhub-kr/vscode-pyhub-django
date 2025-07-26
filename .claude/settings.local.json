@@ -13,7 +13,10 @@
       "Bash(mv:*)",
       "Bash(mkdir:*)",
       "Bash(touch:*)",
-      "Bash(npm version:*)"
+      "Bash(npm version:*)",
+      "Bash(git tag:*)",
+      "Bash(git push:*)",
+      "Bash(npm run test:unit:*)"
     ],
     "deny": []
   }
