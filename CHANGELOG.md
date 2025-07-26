@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2025-07-27
+
+### Added
+- GitHub Actions workflow for automated releases
+- CHANGELOG.md for tracking version changes
+- Release documentation (docs/RELEASE.md)
+
+### Changed
+- Updated project dependencies
+
+## [0.1.0] - 2025-07-27
+
 ### Added
 - Initial release of Django Power Tools
 - Smart Python path configuration for Django projects
@@ -27,8 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - All tests passing (86 tests, 100% success rate)
 
-## [0.1.0] - TBD
-- Initial beta release
-
-[Unreleased]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/pyhub-kr/vscode-pyhub-django/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/pyhub-kr/vscode-pyhub-django/releases/tag/v0.1.0
