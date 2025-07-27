@@ -107,26 +107,43 @@ export class LRUCache<K, V> {
      * Update memory usage estimate
      */
     private updateMemoryUsage(): void {
-        // Rough estimate of memory usage
-        let totalSize = 0;
+        // More efficient memory estimation - only calculate for new/modified items
+        // In a real implementation, we'd track deltas, but for now we'll sample
+        const sampleSize = Math.min(10, this.cache.size);
+        let sampledSize = 0;
+        let count = 0;
         
         for (const [key, value] of this.cache) {
-            totalSize += this.estimateSize(key) + this.estimateSize(value);
+            if (count >= sampleSize) break;
+            sampledSize += this.estimateSize(key) + this.estimateSize(value);
+            count++;
         }
-
-        this.currentMemoryUsage = totalSize / 1024 / 1024; // Convert to MB
+        
+        // Estimate total based on sample
+        const avgItemSize = count > 0 ? sampledSize / count : 0;
+        const estimatedTotalSize = avgItemSize * this.cache.size;
+        
+        this.currentMemoryUsage = estimatedTotalSize / 1024 / 1024; // Convert to MB
 
         // If memory limit exceeded, remove oldest items
         while (this.currentMemoryUsage > this.maxMemoryMB && this.cache.size > 0) {
             const firstKey = this.cache.keys().next().value;
             this.cache.delete(firstKey);
             
-            // Recalculate
-            totalSize = 0;
+            // Recalculate using sampling again
+            const newSampleSize = Math.min(10, this.cache.size);
+            let newSampledSize = 0;
+            let newCount = 0;
+            
             for (const [key, value] of this.cache) {
-                totalSize += this.estimateSize(key) + this.estimateSize(value);
+                if (newCount >= newSampleSize) break;
+                newSampledSize += this.estimateSize(key) + this.estimateSize(value);
+                newCount++;
             }
-            this.currentMemoryUsage = totalSize / 1024 / 1024;
+            
+            const newAvgItemSize = newCount > 0 ? newSampledSize / newCount : 0;
+            const newEstimatedTotalSize = newAvgItemSize * this.cache.size;
+            this.currentMemoryUsage = newEstimatedTotalSize / 1024 / 1024;
         }
     }
 

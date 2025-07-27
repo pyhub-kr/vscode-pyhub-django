@@ -102,8 +102,13 @@ export class PerformanceCommands {
             const report = this.projectAnalyzer.getPerformanceReport();
             const cacheStats = report.cacheStats;
             
-            // Clear the cache
-            (this.projectAnalyzer as any).fileCache.clear();
+            // Clear the cache using a public method
+            if ('clearCache' in this.projectAnalyzer) {
+                (this.projectAnalyzer as any).clearCache();
+            } else {
+                // Fallback for compatibility
+                (this.projectAnalyzer as any).fileCache?.clear();
+            }
             
             vscode.window.showInformationMessage(
                 `Cleared ${cacheStats.size} cached items (${cacheStats.memoryUsageMB.toFixed(2)} MB)`

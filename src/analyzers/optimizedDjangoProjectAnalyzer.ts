@@ -28,10 +28,16 @@ export class OptimizedDjangoProjectAnalyzer extends DjangoProjectAnalyzer {
     ) {
         super(advancedAnalyzer, fileSystem);
         
+        // Read configuration from VS Code settings
+        const config = vscode.workspace.getConfiguration('djangoPowerTools.performance');
+        const analysisWorkers = config.get<number>('analysisWorkers', 3);
+        const cacheMaxSizeMB = config.get<number>('cacheMaxSizeMB', 100);
+        const debounceDelay = config.get<number>('debounceDelay', 500);
+        
         this.progressiveAnalyzer = new ProgressiveAnalyzer();
-        this.fileCache = new FileCache<any>(1000, 100); // 1000 files, 100MB max
-        this.workerPool = new AnalysisWorkerPool(3); // 3 concurrent workers
-        this.debouncedExecutor = new DebouncedTaskExecutor(500); // 500ms delay
+        this.fileCache = new FileCache<any>(1000, cacheMaxSizeMB);
+        this.workerPool = new AnalysisWorkerPool(analysisWorkers);
+        this.debouncedExecutor = new DebouncedTaskExecutor(debounceDelay);
         this.profiler = new PerformanceProfiler();
         
         // Create status bar item for progress
@@ -306,11 +312,20 @@ export class OptimizedDjangoProjectAnalyzer extends DjangoProjectAnalyzer {
      * Extract URL analysis result for caching
      */
     private extractUrlAnalysisResult(filePath: string): any {
+        // Extract only patterns from this specific file
         const patterns: any[] = [];
+        const filePathNormalized = filePath.replace(/\\/g, '/');
+        
+        // Filter patterns that belong to this file
         for (const [key, pattern] of this.urlPatternCache) {
-            patterns.push({ key, ...pattern });
+            // URL patterns typically include file information in their key or metadata
+            // We need to check if this pattern belongs to the current file
+            if (key.includes(filePathNormalized) || key.startsWith(path.basename(filePath, '.py'))) {
+                patterns.push({ key, ...pattern });
+            }
         }
-        return { patterns };
+        
+        return { filePath, patterns };
     }
 
     /**
@@ -359,6 +374,13 @@ export class OptimizedDjangoProjectAnalyzer extends DjangoProjectAnalyzer {
             cacheStats: this.fileCache.getStats(),
             workerStatus: this.workerPool.getStatus()
         };
+    }
+
+    /**
+     * Clear analysis cache
+     */
+    clearCache(): void {
+        this.fileCache.clear();
     }
 
     /**
