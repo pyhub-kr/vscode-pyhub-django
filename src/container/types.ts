@@ -17,6 +17,7 @@ export const TYPES = {
     
     // Command Handlers
     ManagePyCommandHandler: Symbol.for('ManagePyCommandHandler'),
+    PerformanceCommands: Symbol.for('PerformanceCommands'),
     
     // Completion Providers
     DjangoModelCompletionProvider: Symbol.for('DjangoModelCompletionProvider'),

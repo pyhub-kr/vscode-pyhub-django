@@ -6,6 +6,7 @@ import { DjangoProjectAnalyzer } from '../analyzers/djangoProjectAnalyzer';
 import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
 import { ProjectPathConfigurator } from '../projectPathConfigurator';
 import { ManagePyCommandHandler } from '../commands/managePyCommandHandler';
+import { PerformanceCommands } from '../commands/performanceCommands';
 
 @injectable()
 export class CommandService {
@@ -16,7 +17,8 @@ export class CommandService {
         @inject(TYPES.DjangoProjectAnalyzer) private projectAnalyzer: DjangoProjectAnalyzer,
         @inject(TYPES.UrlPatternAnalyzer) private urlPatternAnalyzer: UrlPatternAnalyzer,
         @inject(TYPES.ProjectPathConfigurator) private pathConfigurator: ProjectPathConfigurator,
-        @inject(TYPES.ManagePyCommandHandler) private managePyCommandHandler: ManagePyCommandHandler
+        @inject(TYPES.ManagePyCommandHandler) private managePyCommandHandler: ManagePyCommandHandler,
+        @inject(TYPES.PerformanceCommands) private performanceCommands: PerformanceCommands
     ) {}
 
     async register(): Promise<void> {
@@ -25,6 +27,9 @@ export class CommandService {
         this.registerPythonPathCommands();
         this.registerManagePyCommands();
         this.registerProjectCommands();
+        
+        // Register performance commands
+        this.performanceCommands.register();
     }
 
     private registerHelloWorldCommand(): void {

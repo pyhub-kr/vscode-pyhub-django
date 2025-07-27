@@ -25,6 +25,7 @@
 - **실시간 업데이트**: 모델 변경 시 즉시 자동완성 목록 갱신
 - **PyCharm 수준의 IntelliSense**: Django 전용 코드 완성 기능
 - **경량화**: 빠른 시작과 낮은 메모리 사용량
+- **🚀 대규모 프로젝트 최적화**: 1000+ 파일 프로젝트도 5초 이내 초기 분석
 
 ## 📌 주요 기능
 
@@ -146,7 +147,12 @@ post.save()  # 메서드 제안
     "djangoPowerTools.enableModelIntelliSense": true,
     
     // URL 태그 자동 완성 활성화
-    "djangoPowerTools.enableUrlTagCompletion": true
+    "djangoPowerTools.enableUrlTagCompletion": true,
+    
+    // 성능 최적화 설정
+    "djangoPowerTools.performance.enableProgressiveAnalysis": true,
+    "djangoPowerTools.performance.analysisWorkers": 3,
+    "djangoPowerTools.performance.cacheMaxSizeMB": 100
 }
 ```
 
@@ -169,6 +175,12 @@ post.save()  # 메서드 제안
 - `app_name` 네임스페이스 지원
 - URL 파라미터 정보 제공
 - 실시간 URL 패턴 업데이트
+
+### 🚀 성능 최적화 (NEW!)
+- **점진적 분석**: UI를 차단하지 않는 백그라운드 분석
+- **스마트 캐싱**: 컨텐츠 기반 검증으로 재분석 최소화
+- **메모리 관리**: 자동 캐시 제거로 메모리 효율성 보장
+- **성능 모니터링**: 실시간 성능 리포트 제공
 
 ## 🐛 문제 해결
 

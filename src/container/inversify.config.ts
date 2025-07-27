@@ -7,6 +7,7 @@ import { PythonIntegration, PythonExecutor } from '../pythonIntegration';
 
 // Analyzers
 import { DjangoProjectAnalyzer } from '../analyzers/djangoProjectAnalyzer';
+import { OptimizedDjangoProjectAnalyzer } from '../analyzers/optimizedDjangoProjectAnalyzer';
 import { AdvancedModelAnalyzer } from '../analyzers/advancedModelAnalyzer';
 import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
 
@@ -15,6 +16,7 @@ import { ProjectPathConfigurator } from '../projectPathConfigurator';
 
 // Command handlers
 import { ManagePyCommandHandler } from '../commands/managePyCommandHandler';
+import { PerformanceCommands } from '../commands/performanceCommands';
 
 // Completion providers
 import { DjangoModelCompletionProvider, DjangoFieldCompletionProvider } from '../providers/djangoModelCompletionProvider';
@@ -38,7 +40,13 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<PythonExecutor>(TYPES.PythonExecutor).to(PythonExecutor).inSingletonScope();
     
     // Analyzers - Singleton
-    container.bind<DjangoProjectAnalyzer>(TYPES.DjangoProjectAnalyzer).to(DjangoProjectAnalyzer).inSingletonScope();
+    // Use OptimizedDjangoProjectAnalyzer if performance mode is enabled
+    const performanceMode = vscode.workspace.getConfiguration('djangoPowerTools.performance').get('enableProgressiveAnalysis', true);
+    if (performanceMode) {
+        container.bind<DjangoProjectAnalyzer>(TYPES.DjangoProjectAnalyzer).to(OptimizedDjangoProjectAnalyzer).inSingletonScope();
+    } else {
+        container.bind<DjangoProjectAnalyzer>(TYPES.DjangoProjectAnalyzer).to(DjangoProjectAnalyzer).inSingletonScope();
+    }
     container.bind<AdvancedModelAnalyzer>(TYPES.AdvancedModelAnalyzer).to(AdvancedModelAnalyzer).inSingletonScope();
     container.bind<UrlPatternAnalyzer>(TYPES.UrlPatternAnalyzer).to(UrlPatternAnalyzer).inSingletonScope();
     
@@ -47,6 +55,7 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     
     // Command handlers - Singleton
     container.bind<ManagePyCommandHandler>(TYPES.ManagePyCommandHandler).to(ManagePyCommandHandler).inSingletonScope();
+    container.bind<PerformanceCommands>(TYPES.PerformanceCommands).to(PerformanceCommands).inSingletonScope();
     
     // Completion providers - Transient (created as needed)
     container.bind<DjangoModelCompletionProvider>(TYPES.DjangoModelCompletionProvider).to(DjangoModelCompletionProvider);

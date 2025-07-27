@@ -81,6 +81,14 @@
       {
         "command": "django-power-tools.rescanProject",
         "title": "Django Power Tools: Rescan Django Project"
+      },
+      {
+        "command": "django-power-tools.showPerformanceReport",
+        "title": "Django Power Tools: Show Performance Report"
+      },
+      {
+        "command": "django-power-tools.clearCache",
+        "title": "Django Power Tools: Clear Analysis Cache"
       }
     ],
     "configuration": {
@@ -105,6 +113,37 @@
           "type": "boolean",
           "default": true,
           "description": "Enable auto-completion for Django URL tags in templates"
+        },
+        "djangoPowerTools.performance.enableProgressiveAnalysis": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable progressive background analysis for large projects"
+        },
+        "djangoPowerTools.performance.analysisWorkers": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Number of concurrent workers for background analysis"
+        },
+        "djangoPowerTools.performance.cacheMaxSizeMB": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 500,
+          "description": "Maximum memory usage for analysis cache (MB)"
+        },
+        "djangoPowerTools.performance.debounceDelay": {
+          "type": "number",
+          "default": 500,
+          "minimum": 100,
+          "maximum": 2000,
+          "description": "Delay in milliseconds before analyzing changed files"
+        },
+        "djangoPowerTools.performance.enableCaching": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable caching of analysis results"
         }
       }
     }
