@@ -26,11 +26,15 @@ import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider'
 import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletionProvider';
 import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
 
+// Definition providers
+import { DjangoDefinitionProvider } from '../providers/djangoDefinitionProvider';
+
 // Services
 import { ExtensionService } from '../services/extensionService';
 import { CompletionService } from '../services/completionService';
 import { CommandService } from '../services/commandService';
 import { FileWatcherService } from '../services/fileWatcherService';
+import { DefinitionService } from '../services/definitionService';
 
 export function createContainer(context: vscode.ExtensionContext): Container {
     const container = new Container();
@@ -69,11 +73,15 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<DjangoFormsCompletionProvider>(TYPES.DjangoFormsCompletionProvider).to(DjangoFormsCompletionProvider);
     container.bind<DjangoModelFormCompletionProvider>(TYPES.DjangoModelFormCompletionProvider).to(DjangoModelFormCompletionProvider);
     
+    // Definition providers - Transient
+    container.bind<DjangoDefinitionProvider>(TYPES.DjangoDefinitionProvider).to(DjangoDefinitionProvider);
+    
     // Services - Singleton
     container.bind<ExtensionService>(TYPES.ExtensionService).to(ExtensionService).inSingletonScope();
     container.bind<CompletionService>(TYPES.CompletionService).to(CompletionService).inSingletonScope();
     container.bind<CommandService>(TYPES.CommandService).to(CommandService).inSingletonScope();
     container.bind<FileWatcherService>(TYPES.FileWatcherService).to(FileWatcherService).inSingletonScope();
+    container.bind<DefinitionService>(TYPES.DefinitionService).to(DefinitionService).inSingletonScope();
     
     return container;
 }

@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Cross-file hyperlink navigation (Go to Definition) support:
+  - Template URL tags → URL pattern definitions in urls.py
+  - URL pattern view references → View class/function definitions
+  - Template path references → Template file navigation
+  - Namespace support for URL patterns (app_name:url_name)
+  - Support for both class-based and function-based views
 - Comprehensive Django Forms autocomplete support:
   - Form field types (CharField, EmailField, IntegerField, etc.)
   - Field parameters (required, label, help_text, widget, etc.)
