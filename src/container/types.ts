@@ -15,6 +15,7 @@ export const TYPES = {
     DjangoFormAnalyzer: Symbol.for('DjangoFormAnalyzer'),
     ViewContextAnalyzer: Symbol.for('ViewContextAnalyzer'),
     StaticFileAnalyzer: Symbol.for('StaticFileAnalyzer'),
+    DjangoAdminAnalyzer: Symbol.for('DjangoAdminAnalyzer'),
     
     // Configuration
     ProjectPathConfigurator: Symbol.for('ProjectPathConfigurator'),
@@ -32,6 +33,7 @@ export const TYPES = {
     DjangoModelFormCompletionProvider: Symbol.for('DjangoModelFormCompletionProvider'),
     TemplateContextCompletionProvider: Symbol.for('TemplateContextCompletionProvider'),
     StaticPathCompletionProvider: Symbol.for('StaticPathCompletionProvider'),
+    DjangoAdminCompletionProvider: Symbol.for('DjangoAdminCompletionProvider'),
     
     // Definition Providers
     DjangoDefinitionProvider: Symbol.for('DjangoDefinitionProvider'),
@@ -43,5 +45,9 @@ export const TYPES = {
     CommandService: Symbol.for('CommandService'),
     FileWatcherService: Symbol.for('FileWatcherService'),
     EnhancedFileWatcherService: Symbol.for('EnhancedFileWatcherService'),
-    DefinitionService: Symbol.for('DefinitionService')
+    DefinitionService: Symbol.for('DefinitionService'),
+    CacheService: Symbol.for('CacheService'),
+    
+    // Parsers
+    PythonParser: Symbol.for('PythonParser')
 };

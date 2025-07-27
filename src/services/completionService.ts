@@ -10,8 +10,10 @@ import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletio
 import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
 import { TemplateContextCompletionProvider } from '../providers/templateContextCompletionProvider';
 import { StaticPathCompletionProvider } from '../providers/staticPathCompletionProvider';
+import { DjangoAdminCompletionProvider } from '../completions/djangoAdminCompletionProvider';
 import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
 import { StaticFileAnalyzer } from '../analyzers/staticFileAnalyzer';
+import { DjangoAdminAnalyzer } from '../analyzers/djangoAdminAnalyzer';
 
 @injectable()
 export class CompletionService {
@@ -23,6 +25,7 @@ export class CompletionService {
         @inject(TYPES.UrlPatternAnalyzer) private urlPatternAnalyzer: UrlPatternAnalyzer,
         @inject(TYPES.DjangoFormAnalyzer) private formAnalyzer: DjangoFormAnalyzer,
         @inject(TYPES.StaticFileAnalyzer) private staticFileAnalyzer: StaticFileAnalyzer,
+        @inject(TYPES.DjangoAdminAnalyzer) private adminAnalyzer: DjangoAdminAnalyzer,
         @inject(TYPES.DjangoModelCompletionProvider) private modelCompletionProvider: DjangoModelCompletionProvider,
         @inject(TYPES.DjangoFieldCompletionProvider) private fieldCompletionProvider: DjangoFieldCompletionProvider,
         @inject(TYPES.EnhancedCompletionProvider) private enhancedCompletionProvider: EnhancedCompletionProvider,
@@ -30,7 +33,8 @@ export class CompletionService {
         @inject(TYPES.DjangoFormsCompletionProvider) private formsCompletionProvider: DjangoFormsCompletionProvider,
         @inject(TYPES.DjangoModelFormCompletionProvider) private modelFormCompletionProvider: DjangoModelFormCompletionProvider,
         @inject(TYPES.TemplateContextCompletionProvider) private templateContextCompletionProvider: TemplateContextCompletionProvider,
-        @inject(TYPES.StaticPathCompletionProvider) private staticPathCompletionProvider: StaticPathCompletionProvider
+        @inject(TYPES.StaticPathCompletionProvider) private staticPathCompletionProvider: StaticPathCompletionProvider,
+        @inject(TYPES.DjangoAdminCompletionProvider) private adminCompletionProvider: DjangoAdminCompletionProvider
     ) {}
 
     async register(): Promise<void> {
@@ -39,6 +43,9 @@ export class CompletionService {
         
         // Initialize static file analyzer
         await this.staticFileAnalyzer.initialize();
+        
+        // Scan for admin files
+        await this.adminAnalyzer.scanWorkspace();
         
         // Register enhanced completion provider with higher priority
         this.disposables.push(
@@ -125,6 +132,15 @@ export class CompletionService {
                 ],
                 this.staticPathCompletionProvider,
                 "'", '"', '/'  // Trigger on quotes and slash
+            )
+        );
+
+        // Register Django Admin completion provider
+        this.disposables.push(
+            vscode.languages.registerCompletionItemProvider(
+                { scheme: 'file', language: 'python' },
+                this.adminCompletionProvider,
+                '.', '=', ' ', '@', '('  // Trigger on various admin-related characters
             )
         );
 

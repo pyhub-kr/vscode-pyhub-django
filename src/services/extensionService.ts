@@ -8,7 +8,9 @@ import { ProjectPathConfigurator } from '../projectPathConfigurator';
 import { CompletionService } from './completionService';
 import { CommandService } from './commandService';
 import { FileWatcherService } from './fileWatcherService';
+import { EnhancedFileWatcherService } from './enhancedFileWatcherService';
 import { DefinitionService } from './definitionService';
+import { DjangoAdminAnalyzer } from '../analyzers/djangoAdminAnalyzer';
 
 @injectable()
 export class ExtensionService {
@@ -21,7 +23,9 @@ export class ExtensionService {
         @inject(TYPES.CompletionService) private completionService: CompletionService,
         @inject(TYPES.CommandService) private commandService: CommandService,
         @inject(TYPES.FileWatcherService) private fileWatcherService: FileWatcherService,
-        @inject(TYPES.DefinitionService) private definitionService: DefinitionService
+        @inject(TYPES.EnhancedFileWatcherService) private enhancedFileWatcherService: EnhancedFileWatcherService,
+        @inject(TYPES.DefinitionService) private definitionService: DefinitionService,
+        @inject(TYPES.DjangoAdminAnalyzer) private adminAnalyzer: DjangoAdminAnalyzer
     ) {}
 
     async initialize(): Promise<void> {
@@ -63,10 +67,33 @@ export class ExtensionService {
         await this.commandService.register();
         await this.fileWatcherService.register();
         await this.definitionService.register();
+        
+        // Setup enhanced file watching for admin files
+        this.setupAdminFileWatching();
+        this.enhancedFileWatcherService.register();
+    }
+
+    private setupAdminFileWatching(): void {
+        // Watch admin.py files
+        this.enhancedFileWatcherService.watchPattern('**/admin.py', async (uri, changeType) => {
+            if (changeType === vscode.FileChangeType.Deleted) {
+                // Clear admin classes from deleted file
+                await this.adminAnalyzer.analyzeAdminFile('', uri.fsPath);
+            } else {
+                // Re-analyze changed or created admin file
+                try {
+                    const document = await vscode.workspace.openTextDocument(uri);
+                    await this.adminAnalyzer.analyzeAdminFile(document.getText(), uri.fsPath);
+                } catch (error) {
+                    console.error(`Error analyzing admin file ${uri.fsPath}:`, error);
+                }
+            }
+        });
     }
 
     dispose(): void {
         this.pythonIntegration.dispose();
         this.commandService.dispose();
+        this.enhancedFileWatcherService.dispose();
     }
 }

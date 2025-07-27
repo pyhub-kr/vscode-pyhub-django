@@ -14,6 +14,7 @@ import { EnhancedUrlPatternAnalyzer } from '../analyzers/enhancedUrlPatternAnaly
 import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
 import { ViewContextAnalyzer } from '../analyzers/viewContextAnalyzer';
 import { StaticFileAnalyzer } from '../analyzers/staticFileAnalyzer';
+import { DjangoAdminAnalyzer } from '../analyzers/djangoAdminAnalyzer';
 
 // Configuration
 import { ProjectPathConfigurator } from '../projectPathConfigurator';
@@ -30,6 +31,7 @@ import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletio
 import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
 import { TemplateContextCompletionProvider } from '../providers/templateContextCompletionProvider';
 import { StaticPathCompletionProvider } from '../providers/staticPathCompletionProvider';
+import { DjangoAdminCompletionProvider } from '../completions/djangoAdminCompletionProvider';
 
 // Definition providers
 import { DjangoDefinitionProvider } from '../providers/djangoDefinitionProvider';
@@ -42,6 +44,10 @@ import { CommandService } from '../services/commandService';
 import { FileWatcherService } from '../services/fileWatcherService';
 import { EnhancedFileWatcherService } from '../services/enhancedFileWatcherService';
 import { DefinitionService } from '../services/definitionService';
+import { CacheService } from '../services/cacheService';
+
+// Parsers
+import { PythonParser } from '../parsers/pythonParser';
 
 export function createContainer(context: vscode.ExtensionContext): Container {
     const container = new Container();
@@ -67,6 +73,7 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<DjangoFormAnalyzer>(TYPES.DjangoFormAnalyzer).to(DjangoFormAnalyzer).inSingletonScope();
     container.bind<ViewContextAnalyzer>(TYPES.ViewContextAnalyzer).to(ViewContextAnalyzer).inSingletonScope();
     container.bind<StaticFileAnalyzer>(TYPES.StaticFileAnalyzer).to(StaticFileAnalyzer).inSingletonScope();
+    container.bind<DjangoAdminAnalyzer>(TYPES.DjangoAdminAnalyzer).to(DjangoAdminAnalyzer).inSingletonScope();
     
     // Configuration - Singleton
     container.bind<ProjectPathConfigurator>(TYPES.ProjectPathConfigurator).to(ProjectPathConfigurator).inSingletonScope();
@@ -84,6 +91,7 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<DjangoModelFormCompletionProvider>(TYPES.DjangoModelFormCompletionProvider).to(DjangoModelFormCompletionProvider);
     container.bind<TemplateContextCompletionProvider>(TYPES.TemplateContextCompletionProvider).to(TemplateContextCompletionProvider);
     container.bind<StaticPathCompletionProvider>(TYPES.StaticPathCompletionProvider).to(StaticPathCompletionProvider);
+    container.bind<DjangoAdminCompletionProvider>(TYPES.DjangoAdminCompletionProvider).to(DjangoAdminCompletionProvider);
     
     // Definition providers - Transient
     container.bind<DjangoDefinitionProvider>(TYPES.DjangoDefinitionProvider).to(DjangoDefinitionProvider);
@@ -96,6 +104,10 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<FileWatcherService>(TYPES.FileWatcherService).to(FileWatcherService).inSingletonScope();
     container.bind<EnhancedFileWatcherService>(TYPES.EnhancedFileWatcherService).to(EnhancedFileWatcherService).inSingletonScope();
     container.bind<DefinitionService>(TYPES.DefinitionService).to(DefinitionService).inSingletonScope();
+    container.bind<CacheService>(TYPES.CacheService).to(CacheService).inSingletonScope();
+    
+    // Parsers
+    container.bind<PythonParser>(TYPES.PythonParser).to(PythonParser).inSingletonScope();
     
     return container;
 }

@@ -417,6 +417,10 @@ export class AdvancedModelAnalyzer {
         return result;
     }
 
+    getModels(): Map<string, EnhancedModelInfo> {
+        return this.models;
+    }
+
     getModel(name: string): EnhancedModelInfo | undefined {
         return this.models.get(name);
     }
