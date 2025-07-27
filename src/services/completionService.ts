@@ -6,6 +6,9 @@ import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
 import { DjangoModelCompletionProvider, DjangoFieldCompletionProvider } from '../providers/djangoModelCompletionProvider';
 import { EnhancedCompletionProvider } from '../providers/enhancedCompletionProvider';
 import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider';
+import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletionProvider';
+import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
+import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
 
 @injectable()
 export class CompletionService {
@@ -15,13 +18,19 @@ export class CompletionService {
         @inject(TYPES.ExtensionContext) private context: vscode.ExtensionContext,
         @inject(TYPES.DjangoProjectAnalyzer) private projectAnalyzer: DjangoProjectAnalyzer,
         @inject(TYPES.UrlPatternAnalyzer) private urlPatternAnalyzer: UrlPatternAnalyzer,
+        @inject(TYPES.DjangoFormAnalyzer) private formAnalyzer: DjangoFormAnalyzer,
         @inject(TYPES.DjangoModelCompletionProvider) private modelCompletionProvider: DjangoModelCompletionProvider,
         @inject(TYPES.DjangoFieldCompletionProvider) private fieldCompletionProvider: DjangoFieldCompletionProvider,
         @inject(TYPES.EnhancedCompletionProvider) private enhancedCompletionProvider: EnhancedCompletionProvider,
-        @inject(TYPES.UrlTagCompletionProvider) private urlTagCompletionProvider: UrlTagCompletionProvider
+        @inject(TYPES.UrlTagCompletionProvider) private urlTagCompletionProvider: UrlTagCompletionProvider,
+        @inject(TYPES.DjangoFormsCompletionProvider) private formsCompletionProvider: DjangoFormsCompletionProvider,
+        @inject(TYPES.DjangoModelFormCompletionProvider) private modelFormCompletionProvider: DjangoModelFormCompletionProvider
     ) {}
 
     async register(): Promise<void> {
+        // First, scan for forms
+        await this.formAnalyzer.scanWorkspace();
+        
         // Register enhanced completion provider with higher priority
         this.disposables.push(
             vscode.languages.registerCompletionItemProvider(
@@ -66,6 +75,23 @@ export class CompletionService {
                 { scheme: 'file', language: 'python' },
                 this.fieldCompletionProvider,
                 '.'
+            )
+        );
+
+        // Register Django Forms completion providers
+        this.disposables.push(
+            vscode.languages.registerCompletionItemProvider(
+                { scheme: 'file', language: 'python' },
+                this.formsCompletionProvider,
+                '.', '(', '='  // Trigger on dot, parenthesis, and equals for forms
+            )
+        );
+
+        this.disposables.push(
+            vscode.languages.registerCompletionItemProvider(
+                { scheme: 'file', language: 'python' },
+                this.modelFormCompletionProvider,
+                ' ', '='  // Trigger on space and equals for Meta options
             )
         );
 

@@ -176,6 +176,7 @@
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
     "sinon": "^21.0.0",
+    "ts-mockito": "^2.6.1",
     "typescript": "^4.9.3"
   },
   "extensionDependencies": [

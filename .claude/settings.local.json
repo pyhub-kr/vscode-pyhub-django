@@ -18,7 +18,10 @@
       "Bash(git push:*)",
       "Bash(npm run test:unit:*)",
       "Bash(vsce package:*)",
-      "Bash(gh release upload:*)"
+      "Bash(gh release upload:*)",
+      "Bash(git merge:*)",
+      "Bash(gh pr close:*)",
+      "Bash(git branch:*)"
     ],
     "deny": []
   }

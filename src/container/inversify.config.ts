@@ -10,6 +10,7 @@ import { DjangoProjectAnalyzer } from '../analyzers/djangoProjectAnalyzer';
 import { OptimizedDjangoProjectAnalyzer } from '../analyzers/optimizedDjangoProjectAnalyzer';
 import { AdvancedModelAnalyzer } from '../analyzers/advancedModelAnalyzer';
 import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
+import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
 
 // Configuration
 import { ProjectPathConfigurator } from '../projectPathConfigurator';
@@ -22,6 +23,8 @@ import { PerformanceCommands } from '../commands/performanceCommands';
 import { DjangoModelCompletionProvider, DjangoFieldCompletionProvider } from '../providers/djangoModelCompletionProvider';
 import { EnhancedCompletionProvider } from '../providers/enhancedCompletionProvider';
 import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider';
+import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletionProvider';
+import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
 
 // Services
 import { ExtensionService } from '../services/extensionService';
@@ -49,6 +52,7 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     }
     container.bind<AdvancedModelAnalyzer>(TYPES.AdvancedModelAnalyzer).to(AdvancedModelAnalyzer).inSingletonScope();
     container.bind<UrlPatternAnalyzer>(TYPES.UrlPatternAnalyzer).to(UrlPatternAnalyzer).inSingletonScope();
+    container.bind<DjangoFormAnalyzer>(TYPES.DjangoFormAnalyzer).to(DjangoFormAnalyzer).inSingletonScope();
     
     // Configuration - Singleton
     container.bind<ProjectPathConfigurator>(TYPES.ProjectPathConfigurator).to(ProjectPathConfigurator).inSingletonScope();
@@ -62,6 +66,8 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<DjangoFieldCompletionProvider>(TYPES.DjangoFieldCompletionProvider).to(DjangoFieldCompletionProvider);
     container.bind<EnhancedCompletionProvider>(TYPES.EnhancedCompletionProvider).to(EnhancedCompletionProvider);
     container.bind<UrlTagCompletionProvider>(TYPES.UrlTagCompletionProvider).to(UrlTagCompletionProvider);
+    container.bind<DjangoFormsCompletionProvider>(TYPES.DjangoFormsCompletionProvider).to(DjangoFormsCompletionProvider);
+    container.bind<DjangoModelFormCompletionProvider>(TYPES.DjangoModelFormCompletionProvider).to(DjangoModelFormCompletionProvider);
     
     // Services - Singleton
     container.bind<ExtensionService>(TYPES.ExtensionService).to(ExtensionService).inSingletonScope();
