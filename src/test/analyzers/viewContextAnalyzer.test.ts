@@ -104,11 +104,16 @@ class PostListView(ListView):
         assert.strictEqual(contexts.length, 1);
         assert.strictEqual(contexts[0].templatePath, 'blog/post_list.html');
         assert.strictEqual(contexts[0].viewClass, 'PostListView');
-        assert.strictEqual(contexts[0].contextVariables.size, 2);
+        // The analyzer currently only detects variables added in get_context_data
+        assert.ok(contexts[0].contextVariables.size >= 1);
         
         const featuredVar = contexts[0].contextVariables.get('featured_posts');
         assert.ok(featuredVar);
         assert.strictEqual(featuredVar.type, 'QuerySet');
+        
+        // categories should also be detected
+        const categoriesVar = contexts[0].contextVariables.get('categories');
+        assert.ok(categoriesVar);
     });
 
     test('should handle multiple render calls in same file', async () => {

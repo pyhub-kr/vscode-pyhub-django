@@ -16,6 +16,8 @@ suite('Project Path Configuration Test Suite', () => {
 
     teardown(() => {
         sandbox.restore();
+        // Reset workspaceFolders property
+        delete (vscode.workspace as any).workspaceFolders;
     });
 
     test('should detect Django project root from manage.py location', async () => {
@@ -25,7 +27,11 @@ suite('Project Path Configuration Test Suite', () => {
             index: 0
         };
 
-        sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
+        // Use getter stub for workspaceFolders
+        Object.defineProperty(vscode.workspace, 'workspaceFolders', {
+            value: [testWorkspaceFolder],
+            configurable: true
+        });
         
         // Mock file system - manage.py in root
         const files = [
@@ -47,7 +53,11 @@ suite('Project Path Configuration Test Suite', () => {
             index: 0
         };
 
-        sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
+        // Use getter stub for workspaceFolders
+        Object.defineProperty(vscode.workspace, 'workspaceFolders', {
+            value: [testWorkspaceFolder],
+            configurable: true
+        });
         
         // Mock file system - manage.py in subdirectory
         const files = [
@@ -68,7 +78,11 @@ suite('Project Path Configuration Test Suite', () => {
             index: 0
         };
 
-        sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
+        // Use getter stub for workspaceFolders
+        Object.defineProperty(vscode.workspace, 'workspaceFolders', {
+            value: [testWorkspaceFolder],
+            configurable: true
+        });
         sandbox.stub(vscode.workspace, 'findFiles').resolves([]);
 
         const projectRoot = await configurator.findDjangoProjectRoot();
@@ -159,7 +173,11 @@ suite('Project Path Configuration Test Suite', () => {
             index: 0
         };
 
-        sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
+        // Use getter stub for workspaceFolders
+        Object.defineProperty(vscode.workspace, 'workspaceFolders', {
+            value: [testWorkspaceFolder],
+            configurable: true
+        });
         
         // Mock multiple Django projects
         const files = [
@@ -203,7 +221,11 @@ suite('Project Path Configuration Test Suite', () => {
             index: 0
         };
 
-        sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
+        // Use getter stub for workspaceFolders
+        Object.defineProperty(vscode.workspace, 'workspaceFolders', {
+            value: [testWorkspaceFolder],
+            configurable: true
+        });
         
         const files = [vscode.Uri.file('/test/django/project/manage.py')];
         sandbox.stub(vscode.workspace, 'findFiles').resolves(files);

@@ -104,12 +104,12 @@ suite('DjangoFormsCompletionProvider Test Suite', () => {
             { triggerKind: vscode.CompletionTriggerKind.Invoke, triggerCharacter: '.' }
         );
 
-        assert.ok(completions);
-        assert.ok(completions.length > 0);
+        assert.ok(completions, 'Completions should be returned');
+        assert.ok(completions.length > 0, `Expected completions but got ${completions.length}`);
 
         // Check for common widgets
         const widgetNames = completions.map(item => item.label);
-        assert.ok(widgetNames.includes('TextInput'));
+        assert.ok(widgetNames.includes('TextInput'), `Widget names: ${widgetNames.join(', ')}`);
         assert.ok(widgetNames.includes('Textarea'));
         assert.ok(widgetNames.includes('Select'));
         assert.ok(widgetNames.includes('CheckboxInput'));

@@ -81,12 +81,12 @@ suite('DjangoModelFormCompletionProvider Test Suite', () => {
             { triggerKind: vscode.CompletionTriggerKind.Invoke, triggerCharacter: undefined }
         );
 
-        assert.ok(completions);
-        assert.ok(completions.length > 0);
+        assert.ok(completions, 'Completions should be returned');
+        assert.ok(completions.length > 0, `Expected completions but got ${completions.length}`);
 
         // Check for Meta options
         const optionNames = completions.map(item => item.label);
-        assert.ok(optionNames.includes('model'));
+        assert.ok(optionNames.includes('model'), `Options: ${optionNames.join(', ')}`);
         assert.ok(optionNames.includes('fields'));
         assert.ok(optionNames.includes('exclude'));
         assert.ok(optionNames.includes('widgets'));

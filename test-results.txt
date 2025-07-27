@@ -1,0 +1,886 @@
+
+> django-power-tools@0.1.3 pretest
+> npm run compile && npm run lint
+
+
+> django-power-tools@0.1.3 compile
+> tsc -p ./
+
+
+> django-power-tools@0.1.3 lint
+> eslint src --ext ts
+
+
+/Users/allieus/Work/vscode-pyhub-django-extension/src/analyzers/djangoFormAnalyzer.ts
+  270:13  warning  Object Literal Property name `CharField` must match one of the following formats: camelCase        @typescript-eslint/naming-convention
+  271:13  warning  Object Literal Property name `TextField` must match one of the following formats: camelCase        @typescript-eslint/naming-convention
+  272:13  warning  Object Literal Property name `EmailField` must match one of the following formats: camelCase       @typescript-eslint/naming-convention
+  273:13  warning  Object Literal Property name `URLField` must match one of the following formats: camelCase         @typescript-eslint/naming-convention
+  274:13  warning  Object Literal Property name `IntegerField` must match one of the following formats: camelCase     @typescript-eslint/naming-convention
+  275:13  warning  Object Literal Property name `FloatField` must match one of the following formats: camelCase       @typescript-eslint/naming-convention
+  276:13  warning  Object Literal Property name `DecimalField` must match one of the following formats: camelCase     @typescript-eslint/naming-convention
+  277:13  warning  Object Literal Property name `BooleanField` must match one of the following formats: camelCase     @typescript-eslint/naming-convention
+  278:13  warning  Object Literal Property name `DateField` must match one of the following formats: camelCase        @typescript-eslint/naming-convention
+  279:13  warning  Object Literal Property name `DateTimeField` must match one of the following formats: camelCase    @typescript-eslint/naming-convention
+  280:13  warning  Object Literal Property name `TimeField` must match one of the following formats: camelCase        @typescript-eslint/naming-convention
+  281:13  warning  Object Literal Property name `FileField` must match one of the following formats: camelCase        @typescript-eslint/naming-convention
+  282:13  warning  Object Literal Property name `ImageField` must match one of the following formats: camelCase       @typescript-eslint/naming-convention
+  283:13  warning  Object Literal Property name `ForeignKey` must match one of the following formats: camelCase       @typescript-eslint/naming-convention
+  284:13  warning  Object Literal Property name `ManyToManyField` must match one of the following formats: camelCase  @typescript-eslint/naming-convention
+  285:13  warning  Object Literal Property name `OneToOneField` must match one of the following formats: camelCase    @typescript-eslint/naming-convention
+
+/Users/allieus/Work/vscode-pyhub-django-extension/src/cache/lruCache.ts
+  117:38  warning  Expected { after 'if' condition  curly
+  139:48  warning  Expected { after 'if' condition  curly
+
+/Users/allieus/Work/vscode-pyhub-django-extension/src/container/types.ts
+   6:5  warning  Object Literal Property name `ExtensionContext` must match one of the following formats: camelCase                   @typescript-eslint/naming-convention
+   7:5  warning  Object Literal Property name `PythonIntegration` must match one of the following formats: camelCase                  @typescript-eslint/naming-convention
+   8:5  warning  Object Literal Property name `PythonExecutor` must match one of the following formats: camelCase                     @typescript-eslint/naming-convention
+  11:5  warning  Object Literal Property name `DjangoProjectAnalyzer` must match one of the following formats: camelCase              @typescript-eslint/naming-convention
+  12:5  warning  Object Literal Property name `AdvancedModelAnalyzer` must match one of the following formats: camelCase              @typescript-eslint/naming-convention
+  13:5  warning  Object Literal Property name `UrlPatternAnalyzer` must match one of the following formats: camelCase                 @typescript-eslint/naming-convention
+  14:5  warning  Object Literal Property name `DjangoFormAnalyzer` must match one of the following formats: camelCase                 @typescript-eslint/naming-convention
+  15:5  warning  Object Literal Property name `ViewContextAnalyzer` must match one of the following formats: camelCase                @typescript-eslint/naming-convention
+  16:5  warning  Object Literal Property name `StaticFileAnalyzer` must match one of the following formats: camelCase                 @typescript-eslint/naming-convention
+  19:5  warning  Object Literal Property name `ProjectPathConfigurator` must match one of the following formats: camelCase            @typescript-eslint/naming-convention
+  22:5  warning  Object Literal Property name `ManagePyCommandHandler` must match one of the following formats: camelCase             @typescript-eslint/naming-convention
+  23:5  warning  Object Literal Property name `PerformanceCommands` must match one of the following formats: camelCase                @typescript-eslint/naming-convention
+  26:5  warning  Object Literal Property name `DjangoModelCompletionProvider` must match one of the following formats: camelCase      @typescript-eslint/naming-convention
+  27:5  warning  Object Literal Property name `DjangoFieldCompletionProvider` must match one of the following formats: camelCase      @typescript-eslint/naming-convention
+  28:5  warning  Object Literal Property name `EnhancedCompletionProvider` must match one of the following formats: camelCase         @typescript-eslint/naming-convention
+  29:5  warning  Object Literal Property name `UrlTagCompletionProvider` must match one of the following formats: camelCase           @typescript-eslint/naming-convention
+  30:5  warning  Object Literal Property name `DjangoFormsCompletionProvider` must match one of the following formats: camelCase      @typescript-eslint/naming-convention
+  31:5  warning  Object Literal Property name `DjangoModelFormCompletionProvider` must match one of the following formats: camelCase  @typescript-eslint/naming-convention
+  32:5  warning  Object Literal Property name `TemplateContextCompletionProvider` must match one of the following formats: camelCase  @typescript-eslint/naming-convention
+  33:5  warning  Object Literal Property name `StaticPathCompletionProvider` must match one of the following formats: camelCase       @typescript-eslint/naming-convention
+  36:5  warning  Object Literal Property name `DjangoDefinitionProvider` must match one of the following formats: camelCase           @typescript-eslint/naming-convention
+  39:5  warning  Object Literal Property name `ExtensionService` must match one of the following formats: camelCase                   @typescript-eslint/naming-convention
+  40:5  warning  Object Literal Property name `CompletionService` must match one of the following formats: camelCase                  @typescript-eslint/naming-convention
+  41:5  warning  Object Literal Property name `CommandService` must match one of the following formats: camelCase                     @typescript-eslint/naming-convention
+  42:5  warning  Object Literal Property name `FileWatcherService` must match one of the following formats: camelCase                 @typescript-eslint/naming-convention
+  43:5  warning  Object Literal Property name `DefinitionService` must match one of the following formats: camelCase                  @typescript-eslint/naming-convention
+
+/Users/allieus/Work/vscode-pyhub-django-extension/src/test/providers/templateContextCompletionProvider.test.ts
+  51:29  warning  Expected { after 'if' condition  curly
+
+/Users/allieus/Work/vscode-pyhub-django-extension/src/test/suite/performance/performanceBenchmark.test.ts
+  32:13  warning  Object Literal Property name `/test/project/manage.py` must match one of the following formats: camelCase  @typescript-eslint/naming-convention
+
+✖ 46 problems (0 errors, 46 warnings)
+  0 errors and 3 warnings potentially fixable with the `--fix` option.
+
+
+> django-power-tools@0.1.3 test
+> node ./out/test/runTest.js
+
+Extension Development Path: /Users/allieus/Work/vscode-pyhub-django-extension
+Extension Tests Path: /Users/allieus/Work/vscode-pyhub-django-extension/out/test/suite/index
+Running VS Code Extension tests...
+[90m[main 2025-07-27T06:29:37.288Z][0m update#setState disabled
+[90m[main 2025-07-27T06:29:37.289Z][0m update#ctor - updates are disabled by the environment
+ChatSessionStore: Migrating 0 chat sessions from storage service to file system
+Loading development extension at /Users/allieus/Work/vscode-pyhub-django-extension
+Settings Sync: Account status changed from uninitialized to unavailable
+Started local extension host with pid 95630.
+[0m[0m
+[0m  StaticFileAnalyzer Test Suite[0m
+  [31m  1) should initialize and scan static directories[0m
+  [31m  2) should correctly categorize file types[0m
+  [31m  3) should search static files[0m
+  [31m  4) should get files in specific directory[0m
+  [31m  5) should handle file system changes[0m
+[0m  ViewContextAnalyzer Test Suite[0m
+  [31m  6) should extract context from function-based view with inline dict[0m
+  [31m  7) should extract context from function-based view with context variable[0m
+  [31m  8) should extract context from class-based view[0m
+  [31m  9) should handle multiple render calls in same file[0m
+  [31m  10) should find context for template path[0m
+  [31m  11) should infer types from common patterns[0m
+  [32m  ✔[0m[90m should clear cache[0m
+[0m  Django Definition Provider Test Suite[0m
+  [31m  12) Should find URL pattern definition from template URL tag[0m
+  [31m  13) Should find view definition from urls.py[0m
+  [32m  ✔[0m[90m Should find template file from view reference[0m
+[0m  StaticPathCompletionProvider Test Suite[0m
+  [31m  14) should provide static file completions in static tag[0m
+  [31m  15) should filter completions based on current path[0m
+  [31m  16) should show file icons based on type[0m
+  [32m  ✔[0m[90m should not provide completions without {% load static %}[0m
+  [32m  ✔[0m[90m should not provide completions outside static tag[0m
+  [31m  17) should show nested directory structure[0m
+  [31m  18) should include file size in documentation[0m
+  [31m  19) should trigger re-completion for directories[0m
+[0m  TemplateContextCompletionProvider Test Suite[0m
+  [31m  20) should provide context variables in template[0m
+  [31m  21) should provide properties for QuerySet variables[0m
+  [31m  22) should provide form methods and fields[0m
+  [32m  ✔[0m[90m should provide common template variables[0m
+  [31m  23) should detect loop variables[0m
+  [31m  24) should handle nested loops correctly[0m
+  [32m  ✔[0m[90m should not provide completions outside template variables[0m
+  [32m  ✔[0m[90m should not provide completions for non-Django templates[0m
+  [31m  25) should handle Model instance variables[0m
+[0m  Advanced ORM Completion Test Suite[0m
+Completion items: [
+  'all',               'filter',           'exclude',
+  'annotate',          'order_by',         'reverse',
+  'distinct',          'values',           'values_list',
+  'dates',             'datetimes',        'none',
+  'union',             'intersection',     'difference',
+  'select_related',    'prefetch_related', 'extra',
+  'defer',             'only',             'using',
+  'select_for_update', 'raw',              'get',
+  'first',             'last',             'latest',
+  'earliest',          'exists',           'count',
+  'aggregate',         'get_or_create',    'update_or_create',
+  'bulk_create',       'bulk_update',      'in_bulk',
+  'iterator',          'explain',          'delete',
+  'update',            'create',           'by_author'
+]
+  [32m  ✔[0m[90m should provide manager methods for custom managers[0m
+  [32m  ✔[0m[90m should provide field lookups in filter/exclude methods[0m
+  [32m  ✔[0m[90m should provide model method completions[0m
+  [32m  ✔[0m[90m should handle model inheritance correctly[0m
+  [32m  ✔[0m[90m should provide related model completions[0m
+  [32m  ✔[0m[90m should cache analysis results for performance[0m
+  [32m  ✔[0m[90m should handle circular imports gracefully[0m
+  [32m  ✔[0m[90m should provide context-aware completions based on variable type[0m
+[0m  DjangoFormAnalyzer Test Suite[0m
+Analyzed 1 forms in forms.py
+  [32m  ✔[0m[90m should analyze basic Django Form[0m
+Analyzed 1 forms in forms.py
+  [32m  ✔[0m[90m should analyze ModelForm[0m
+Analyzed 3 forms in forms.py
+  [32m  ✔[0m[90m should handle multiple forms in one file[0m
+Analyzed 1 forms in forms.py
+  [32m  ✔[0m[90m should ignore non-form classes[0m
+Analyzed 1 forms in forms.py
+Analyzed 1 forms in forms.py
+Found 2 Django forms
+  [32m  ✔[0m[90m should handle workspace scanning[0m
+Analyzed 2 forms in forms1.py
+Analyzed 1 forms in forms2.py
+  [32m  ✔[0m[90m should get forms by file path[0m
+Analyzed 2 forms in forms.py
+  [32m  ✔[0m[90m should get form by name[0m
+Analyzed 1 forms in forms.py
+  [31m  26) should handle complex field types[0m
+Analyzed 1 forms in forms.py
+  [32m  ✔[0m[90m should clear forms[0m
+[0m  Marketplace Readiness Tests[0m
+  [32m  ✔[0m[90m should have valid package.json[0m
+  [32m  ✔[0m[90m should have required assets[0m
+  [32m  ✔[0m[90m should have valid .vscodeignore[0m
+  [32m  ✔[0m[90m should have no sensitive information[0m
+  [31m  27) should have production dependencies only[0m
+  [32m  ✔[0m[90m should have valid version number[0m
+[0m  Django Model Completion Provider Test Suite[0m
+  [32m  ✔[0m[90m should provide QuerySet completions after .objects.[0m
+  [32m  ✔[0m[90m should provide QuerySet completions after chained methods[0m
+  [32m  ✔[0m[90m should provide model field completions[0m
+  [32m  ✔[0m[90m should provide model class completions for imports[0m
+[0m  Django Field Completion Provider Test Suite[0m
+  [32m  ✔[0m[90m should provide Django field types after models.[0m
+  [32m  ✔[0m[90m should provide appropriate snippets for relationship fields[0m
+[0m  Django Project Analyzer Test Suite[0m
+  [31m  28) should detect Django project with manage.py in root[0m
+  [31m  29) should return false when no Django project is found[0m
+  [31m  30) should extract models from model file content[0m
+  [31m  31) should extract URL patterns from urls file[0m
+  [31m  32) should extract installed apps from settings file[0m
+  [31m  33) should handle file changes and update cache[0m
+[0m  E2E - Performance Benchmarks[0m
+  [32m  ✔[0m[90m should provide model completions within performance threshold[0m
+  [32m  ✔[0m[90m should provide URL completions within performance threshold[0m
+  [32m  ✔[0m[90m should handle large project analysis efficiently[0m
+  [32m  ✔[0m[90m should measure memory usage for caching[0m
+[0m  E2E - Different Project Structures[0m
+  [31m  34) should handle simple blog project structure[0m
+  [32m  ✔[0m[90m should handle multi-app CMS project structure[0m
+Added /Users/allieus/Work/vscode-pyhub-django-extension/test/fixtures/sample-projects/simple-blog to Python analysis paths
+  [32m  ✔[0m[90m should configure paths correctly for nested project[0m
+[0m  E2E - User Scenarios[0m
+  [31m  35) Scenario: New developer opens Django project[0m
+  [32m  ✔[0m[90m Scenario: Template developer uses URL tags[0m
+  [32m  ✔[0m[90m Scenario: Backend developer runs manage.py commands[0m
+  [32m  ✔[0m[90m Scenario: Full-stack developer workflow[0m
+[0m  Extension Test Suite[0m
+  [32m  ✔[0m[90m Extension should be present[0m
+  [32m  ✔[0m[90m Should activate[0m
+  [32m  ✔[0m[90m Should register commands[0m
+[0m  Integration Test Suite[0m
+  [31m  36) Full workflow: detect Django project and configure Python paths[0m
+  [31m  37) Django project analyzer integration with test project[0m
+  [31m  38) Multiple Django projects detection and configuration[0m
+New manage.py detected: /test/new-project/manage.py
+Added /test/new-project to Python analysis paths
+Python Language Server restarted
+  [32m  ✔[0m[90m File watcher triggers configuration for new Django projects[0m
+[0m  Manage.py Commands Test Suite[0m
+  [31m  39) "before each" hook for "should get available Django commands"[0m
+[0m  Performance Benchmark Tests[0m
+  [31m  40) Small project initialization performance (<100 files)[0m
+  [31m  41) Medium project initialization performance (100-500 files)[0m
+  [31m  42) Large project initialization performance (500-1000 files)[0m
+Model analysis time for 100 models: 19ms
+  [32m  ✔[0m[90m Model analysis performance[0m
+Memory increase after caching 50 models: 0.51 MB
+  [32m  ✔[0m[90m Memory usage for caching[0m
+  [31m  43) File change handling performance[0m
+[0m  Project Path Configuration Test Suite[0m
+  [31m  44) should detect Django project root from manage.py location[0m
+  [31m  45) should detect Django project root when manage.py is in subdirectory[0m
+  [31m  46) should return null when no manage.py is found[0m
+  [32m  ✔[0m[90m should get current Python analysis extra paths[0m
+Added /test/django/project to Python analysis paths
+  [32m  ✔[0m[90m should add Django project root to Python paths if not present[0m
+Project root /test/django/project is already in Python paths
+  [32m  ✔[0m[90m should not add Django project root if already in paths[0m
+  [32m  ✔[0m[90m should prompt user before modifying settings[0m
+  [32m  ✔[0m[90m should respect user choice when declining path configuration[0m
+  [31m  47) should handle multiple Django projects in workspace[0m
+Python Language Server restarted
+  [32m  ✔[0m[90m should trigger Python Language Server restart after configuration[0m
+  [31m  48) should configure project on activation if enabled[0m
+Auto import configuration is disabled
+  [32m  ✔[0m[90m should not configure if auto-config is disabled[0m
+Created workspace settings.json
+  [32m  ✔[0m[90m should handle workspace settings.json creation[0m
+[0m  DjangoFormsCompletionProvider Test Suite[0m
+  [32m  ✔[0m[90m should provide form field completions after forms.[0m
+  [32m  ✔[0m[90m should provide field parameter completions inside field parentheses[0m
+  [31m  49) should provide widget completions after widget=forms.[0m
+  [32m  ✔[0m[90m should provide clean method completions after def clean_[0m
+  [32m  ✔[0m[90m should not provide completions in non-forms.py files without forms import[0m
+  [32m  ✔[0m[90m should provide completions in non-forms.py files with forms import[0m
+  [32m  ✔[0m[90m should provide DecimalField with proper parameters[0m
+  [32m  ✔[0m[90m should provide ChoiceField with choices parameter[0m
+  [32m  ✔[0m[90m should provide ModelChoiceField with queryset parameter[0m
+[0m  DjangoModelFormCompletionProvider Test Suite[0m
+  [31m  50) should provide Meta class options in ModelForm[0m
+  [31m  51) should provide model suggestions for model = in Meta class[0m
+  [31m  52) should provide field suggestions inside fields list[0m
+  [31m  53) should provide field suggestions inside exclude list[0m
+  [31m  54) should provide widget suggestions for widgets dictionary[0m
+  [32m  ✔[0m[90m should not provide completions in non-ModelForm classes[0m
+  [31m  55) should handle fields = "__all__" correctly[0m
+  [31m  56) should provide field-specific labels in labels dictionary[0m
+  [31m  57) should extract correct model from complex Meta class[0m
+[0m  Python Integration Test Suite[0m
+Current Python environment: /usr/bin/python3
+  [32m  ✔[0m[90m PythonIntegration should initialize when Python extension is available[0m
+  [32m  ✔[0m[90m PythonIntegration should handle missing Python extension gracefully[0m
+Current Python environment: /usr/bin/python3
+Python environment changed: /usr/bin/python3.9
+  [32m  ✔[0m[90m PythonIntegration should react to Python environment changes[0m
+[0m  Python Executor Test Suite[0m
+  [32m  ✔[0m[90m PythonExecutor should throw error when no Python interpreter is selected[0m
+  [32m  ✔[0m[90m PythonExecutor should find manage.py in workspace root[0m
+  [32m  ✔[0m[90m PythonExecutor should find manage.py in subdirectories[0m
+  [32m  ✔[0m[90m PythonExecutor should return undefined when manage.py is not found[0m
+[0m  TemplateContextAnalyzer Test Suite[0m
+  [32m  ✔[0m[90m should extract context variables from render call[0m
+  [32m  ✔[0m[90m should handle context passed as variable[0m
+  [32m  ✔[0m[90m should infer types from variable names[0m
+  [32m  ✔[0m[90m should get all variables for a template[0m
+[0m  TemplatePathResolver Test Suite[0m
+  [32m  ✔[0m[90m should extract template path from render call[0m
+  [32m  ✔[0m[90m should extract template path with single quotes[0m
+  [32m  ✔[0m[90m should return undefined when cursor not on template path[0m
+  [32m  ✔[0m[90m should handle template path with spaces in render call[0m
+  [32m  ✔[0m[90m should return undefined for malformed render calls[0m
+[0m  URL Tag Completion Test Suite[0m
+  [32m  ✔[0m[90m should parse basic URL patterns with names[0m
+  [32m  ✔[0m[90m should handle included URL patterns[0m
+  [32m  ✔[0m[90m should provide completions in Django template {% url %} tag[0m
+  [32m  ✔[0m[90m should provide completions with app_name prefix[0m
+  [32m  ✔[0m[90m should handle re_path and regex patterns[0m
+  [32m  ✔[0m[90m should provide parameter hints for URL patterns[0m
+  [32m  ✔[0m[90m should watch for URL file changes and update patterns[0m
+  [32m  ✔[0m[90m should handle class-based views[0m
+  [32m  ✔[0m[90m should provide completions in different template syntaxes[0m
+  [32m  ✔[0m[90m should cache analysis results for performance[0m
+[0m  PythonParser Unit Tests[0m
+  [32m  ✔[0m[90m should parse simple model class[0m
+  [32m  ✔[0m[90m should handle custom managers[0m
+  [32m  ✔[0m[90m should extract help text from fields[0m
+[92m [0m[32m 95 passing[0m[90m (292ms)[0m
+[31m  57 failing[0m
+[0m  1) StaticFileAnalyzer Test Suite
+       should initialize and scan static directories:
+[0m[31m     TypeError: Descriptor for property existsSync is non-configurable and non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:138:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/analyzers/staticFileAnalyzer.test.js:51:40)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  2) StaticFileAnalyzer Test Suite
+       should correctly categorize file types:
+[0m[31m     TypeError: Descriptor for property existsSync is non-configurable and non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:138:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/analyzers/staticFileAnalyzer.test.js:86:40)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  3) StaticFileAnalyzer Test Suite
+       should search static files:
+[0m[31m     TypeError: Descriptor for property existsSync is non-configurable and non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:138:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/analyzers/staticFileAnalyzer.test.js:114:40)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  4) StaticFileAnalyzer Test Suite
+       should get files in specific directory:
+[0m[31m     TypeError: Descriptor for property existsSync is non-configurable and non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:138:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/analyzers/staticFileAnalyzer.test.js:145:40)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  5) StaticFileAnalyzer Test Suite
+       should handle file system changes:
+[0m[31m     TypeError: Descriptor for property existsSync is non-configurable and non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:138:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/analyzers/staticFileAnalyzer.test.js:176:40)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  6) ViewContextAnalyzer Test Suite
+       should extract context from function-based view with inline dict:
+
+      [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 2
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-1[0m
+      [32m+2[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/analyzers/viewContextAnalyzer.test.js:58:16)
+[0m
+[0m  7) ViewContextAnalyzer Test Suite
+       should extract context from function-based view with context variable:
+[0m[31m     AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'QuerySet'
+[0m[90m
+  	at Context.<anonymous> (out/test/analyzers/viewContextAnalyzer.test.js:92:16)
+[0m
+[0m  8) ViewContextAnalyzer Test Suite
+       should extract context from class-based view:
+
+      [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 1
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-0[0m
+      [32m+1[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/analyzers/viewContextAnalyzer.test.js:113:16)
+[0m
+[0m  9) ViewContextAnalyzer Test Suite
+       should handle multiple render calls in same file:
+
+      [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'view1' !== 'view2'
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-view1[0m
+      [32m+view2[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/analyzers/viewContextAnalyzer.test.js:138:16)
+[0m
+[0m  10) ViewContextAnalyzer Test Suite
+       should find context for template path:
+
+      [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 1
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-0[0m
+      [32m+1[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/analyzers/viewContextAnalyzer.test.js:156:20)
+[0m
+[0m  11) ViewContextAnalyzer Test Suite
+       should infer types from common patterns:
+[0m[31m     AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'Model'
+[0m[90m
+  	at Context.<anonymous> (out/test/analyzers/viewContextAnalyzer.test.js:187:16)
+[0m
+[0m  12) Django Definition Provider Test Suite
+       Should find URL pattern definition from template URL tag:
+[0m[31m     Error: ENOENT: no such file or directory, open '/test/project/blog/urls.py'[0m[90m
+  	at async open (node:internal/fs/promises:634:25)
+  	at async Object.readFile (node:internal/fs/promises:1242:14)
+  	at async DjangoDefinitionProvider.findPositionInFile (out/providers/djangoDefinitionProvider.js:363:25)
+  	at async DjangoDefinitionProvider.getUrlPatternDefinition (out/providers/djangoDefinitionProvider.js:116:29)
+  	at async Context.<anonymous> (out/test/providers/djangoDefinitionProvider.test.js:62:28)
+[0m
+[0m  13) Django Definition Provider Test Suite
+       Should find view definition from urls.py:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(definition instanceof vscode.Location)
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/providers/djangoDefinitionProvider.test.js:101:16)
+[0m
+[0m  14) StaticPathCompletionProvider Test Suite
+       should provide static file completions in static tag:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/staticPathCompletionProvider.test.js:67:16)
+[0m
+[0m  15) StaticPathCompletionProvider Test Suite
+       should filter completions based on current path:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/staticPathCompletionProvider.test.js:89:16)
+[0m
+[0m  16) StaticPathCompletionProvider Test Suite
+       should show file icons based on type:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/staticPathCompletionProvider.test.js:106:16)
+[0m
+[0m  17) StaticPathCompletionProvider Test Suite
+       should show nested directory structure:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/staticPathCompletionProvider.test.js:139:16)
+[0m
+[0m  18) StaticPathCompletionProvider Test Suite
+       should include file size in documentation:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/staticPathCompletionProvider.test.js:156:16)
+[0m
+[0m  19) StaticPathCompletionProvider Test Suite
+       should trigger re-completion for directories:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/staticPathCompletionProvider.test.js:173:16)
+[0m
+[0m  20) TemplateContextCompletionProvider Test Suite
+       should provide context variables in template:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/templateContextCompletionProvider.test.js:82:16)
+[0m
+[0m  21) TemplateContextCompletionProvider Test Suite
+       should provide properties for QuerySet variables:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/templateContextCompletionProvider.test.js:103:16)
+[0m
+[0m  22) TemplateContextCompletionProvider Test Suite
+       should provide form methods and fields:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/templateContextCompletionProvider.test.js:125:16)
+[0m
+[0m  23) TemplateContextCompletionProvider Test Suite
+       should detect loop variables:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/templateContextCompletionProvider.test.js:159:16)
+[0m
+[0m  24) TemplateContextCompletionProvider Test Suite
+       should handle nested loops correctly:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/templateContextCompletionProvider.test.js:186:16)
+[0m
+[0m  25) TemplateContextCompletionProvider Test Suite
+       should handle Model instance variables:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions)
+[0m[90m
+  	at Context.<anonymous> (out/test/providers/templateContextCompletionProvider.test.js:216:16)
+[0m
+[0m  26) DjangoFormAnalyzer Test Suite
+       should handle complex field types:
+
+      [31mAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+6 !== 8
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-6[0m
+      [32m+8[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/analyzers/djangoFormAnalyzer.test.js:306:16)
+[0m
+[0m  27) Marketplace Readiness Tests
+       should have production dependencies only:
+
+      [31mAssertionError [ERR_ASSERTION]: VS Code extensions should have no production dependencies[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/deployment/marketplaceReadiness.test.js:108:16)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  28) Django Project Analyzer Test Suite
+       should detect Django project with manage.py in root:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/djangoProjectAnalyzer.test.js:47:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  29) Django Project Analyzer Test Suite
+       should return false when no Django project is found:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/djangoProjectAnalyzer.test.js:55:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  30) Django Project Analyzer Test Suite
+       should extract models from model file content:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/djangoProjectAnalyzer.test.js:82:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  31) Django Project Analyzer Test Suite
+       should extract URL patterns from urls file:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/djangoProjectAnalyzer.test.js:112:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  32) Django Project Analyzer Test Suite
+       should extract installed apps from settings file:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/djangoProjectAnalyzer.test.js:150:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  33) Django Project Analyzer Test Suite
+       should handle file changes and update cache:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/djangoProjectAnalyzer.test.js:179:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  34) E2E - Different Project Structures
+       should handle simple blog project structure:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/e2e/projectStructures.test.js:46:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  35) E2E - User Scenarios
+       Scenario: New developer opens Django project:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/e2e/userScenarios.test.js:59:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  36) Integration Test Suite
+       Full workflow: detect Django project and configure Python paths:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/integration.test.js:52:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  37) Integration Test Suite
+       Django project analyzer integration with test project:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/integration.test.js:90:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  38) Integration Test Suite
+       Multiple Django projects detection and configuration:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/integration.test.js:109:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  39) Manage.py Commands Test Suite
+       "before each" hook for "should get available Django commands":
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/managePyCommands.test.js:43:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  40) Performance Benchmark Tests
+       Small project initialization performance (<100 files):
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/performance/performanceBenchmark.test.js:87:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  41) Performance Benchmark Tests
+       Medium project initialization performance (100-500 files):
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/performance/performanceBenchmark.test.js:110:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  42) Performance Benchmark Tests
+       Large project initialization performance (500-1000 files):
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/performance/performanceBenchmark.test.js:133:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  43) Performance Benchmark Tests
+       File change handling performance:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/performance/performanceBenchmark.test.js:199:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  44) Project Path Configuration Test Suite
+       should detect Django project root from manage.py location:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/projectPathConfiguration.test.js:48:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  45) Project Path Configuration Test Suite
+       should detect Django project root when manage.py is in subdirectory:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/projectPathConfiguration.test.js:65:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  46) Project Path Configuration Test Suite
+       should return null when no manage.py is found:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/projectPathConfiguration.test.js:81:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  47) Project Path Configuration Test Suite
+       should handle multiple Django projects in workspace:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/projectPathConfiguration.test.js:148:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  48) Project Path Configuration Test Suite
+       should configure project on activation if enabled:
+[0m[31m     TypeError: Descriptor for data property workspaceFolders is non-writable[0m[90m
+  	at assertValidPropertyDescriptor (node_modules/sinon/lib/sinon/stub.js:148:15)
+  	at stub (node_modules/sinon/lib/sinon/stub.js:89:5)
+  	at Sandbox.stub (node_modules/sinon/lib/sinon/sandbox.js:436:39)
+  	at Context.<anonymous> (out/test/suite/projectPathConfiguration.test.js:182:17)
+  	at process.processImmediate (node:internal/timers:485:21)
+[0m
+[0m  49) DjangoFormsCompletionProvider Test Suite
+       should provide widget completions after widget=forms.:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(widgetNames.includes('TextInput'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoFormsCompletionProvider.test.js:98:16)
+[0m
+[0m  50) DjangoModelFormCompletionProvider Test Suite
+       should provide Meta class options in ModelForm:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(completions.length > 0)
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:85:16)
+[0m
+[0m  51) DjangoModelFormCompletionProvider Test Suite
+       should provide model suggestions for model = in Meta class:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(modelNames.includes('User'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:115:16)
+[0m
+[0m  52) DjangoModelFormCompletionProvider Test Suite
+       should provide field suggestions inside fields list:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(fieldNames.includes('username'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:137:16)
+[0m
+[0m  53) DjangoModelFormCompletionProvider Test Suite
+       should provide field suggestions inside exclude list:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(fieldNames.includes('title'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:159:16)
+[0m
+[0m  54) DjangoModelFormCompletionProvider Test Suite
+       should provide widget suggestions for widgets dictionary:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(fieldNames.includes('username'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:182:16)
+[0m
+[0m  55) DjangoModelFormCompletionProvider Test Suite
+       should handle fields = "__all__" correctly:
+[0m[31m     AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(allOption)
+[0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:207:16)
+[0m
+[0m  56) DjangoModelFormCompletionProvider Test Suite
+       should provide field-specific labels in labels dictionary:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(fieldNames.includes('username'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:224:16)
+[0m
+[0m  57) DjangoModelFormCompletionProvider Test Suite
+       should extract correct model from complex Meta class:
+
+      [31mAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(fieldNames.includes('title'))
+[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-false[0m
+      [32m+true[0m
+      [0m[90m
+  	at Context.<anonymous> (out/test/suite/providers/djangoModelFormCompletionProvider.test.js:242:16)
+[0m
+[90m[main 2025-07-27T06:29:39.725Z][0m Extension host with pid 95630 exited with code: 0, signal: unknown.
+Exit code:   1
