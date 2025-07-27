@@ -16,7 +16,9 @@
       "Bash(npm version:*)",
       "Bash(git tag:*)",
       "Bash(git push:*)",
-      "Bash(npm run test:unit:*)"
+      "Bash(npm run test:unit:*)",
+      "Bash(vsce package:*)",
+      "Bash(gh release upload:*)"
     ],
     "deny": []
   }
