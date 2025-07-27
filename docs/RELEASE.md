@@ -6,10 +6,12 @@ This document describes the release process for Django Power Tools.
 
 The release process is automated using GitHub Actions. When you push a version tag, the workflow automatically:
 
-1. Builds and tests the extension
+1. Compiles TypeScript and runs linting
 2. Creates a `.vsix` package file
 3. Creates a GitHub Release
 4. Uploads the `.vsix` file as a release asset
+
+**Note**: Due to the complexity of running VS Code Extension tests in CI environments, automated tests are run separately in the CI workflow but are not blocking for releases.
 
 ## How to Create a Release
 
@@ -73,9 +75,37 @@ vsce publish
 
 ## Pre-release Checklist
 
-- [ ] All tests passing (`npm test`)
+- [ ] **Run tests locally** (`npm test`) - VS Code Extension tests must be run locally
 - [ ] No linting errors (`npm run lint`)
 - [ ] Extension builds successfully (`npm run compile`)
 - [ ] Manual testing completed
 - [ ] CHANGELOG.md updated
 - [ ] Version bumped in package.json
+
+## Testing Guidelines
+
+### Local Testing
+
+VS Code Extension tests require a full VS Code instance and cannot reliably run in headless CI environments. Before releasing:
+
+1. **Run all tests locally**:
+   ```bash
+   npm test
+   ```
+
+2. **Test on multiple platforms if possible**:
+   - Windows
+   - macOS
+   - Linux
+
+3. **Manual smoke testing**:
+   - Install the extension from the `.vsix` file
+   - Test core features:
+     - Python path configuration
+     - Django model completions
+     - URL tag completions
+     - manage.py commands
+
+### CI Testing
+
+The CI workflow (`ci.yml`) attempts to run tests but is configured with `continue-on-error: true` to prevent blocking PRs. Use CI results as guidance but rely on local testing for release validation.
