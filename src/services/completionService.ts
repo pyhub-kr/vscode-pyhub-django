@@ -8,6 +8,7 @@ import { EnhancedCompletionProvider } from '../providers/enhancedCompletionProvi
 import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider';
 import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletionProvider';
 import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
+import { TemplateContextCompletionProvider } from '../providers/templateContextCompletionProvider';
 import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
 
 @injectable()
@@ -24,7 +25,8 @@ export class CompletionService {
         @inject(TYPES.EnhancedCompletionProvider) private enhancedCompletionProvider: EnhancedCompletionProvider,
         @inject(TYPES.UrlTagCompletionProvider) private urlTagCompletionProvider: UrlTagCompletionProvider,
         @inject(TYPES.DjangoFormsCompletionProvider) private formsCompletionProvider: DjangoFormsCompletionProvider,
-        @inject(TYPES.DjangoModelFormCompletionProvider) private modelFormCompletionProvider: DjangoModelFormCompletionProvider
+        @inject(TYPES.DjangoModelFormCompletionProvider) private modelFormCompletionProvider: DjangoModelFormCompletionProvider,
+        @inject(TYPES.TemplateContextCompletionProvider) private templateContextCompletionProvider: TemplateContextCompletionProvider
     ) {}
 
     async register(): Promise<void> {
@@ -92,6 +94,18 @@ export class CompletionService {
                 { scheme: 'file', language: 'python' },
                 this.modelFormCompletionProvider,
                 ' ', '='  // Trigger on space and equals for Meta options
+            )
+        );
+
+        // Register template context completion provider
+        this.disposables.push(
+            vscode.languages.registerCompletionItemProvider(
+                [
+                    { scheme: 'file', language: 'html' },
+                    { scheme: 'file', language: 'django-html' }
+                ],
+                this.templateContextCompletionProvider,
+                '.', ' '  // Trigger on dot for properties and space for new variables
             )
         );
 

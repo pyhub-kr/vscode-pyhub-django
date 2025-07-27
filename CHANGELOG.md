@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Context-aware template autocomplete:
+  - View context variables automatically detected in templates
+  - QuerySet methods available for context variables
+  - Form rendering methods (as_p, as_table, etc.) for form variables
+  - Loop variable recognition inside {% for %} tags
+  - Common Django template variables (request, user, etc.)
 - Cross-file hyperlink navigation (Go to Definition) support:
   - Template URL tags → URL pattern definitions in urls.py
   - URL pattern view references → View class/function definitions
