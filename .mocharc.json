@@ -1,0 +1,8 @@
+{
+  "require": ["reflect-metadata"],
+  "spec": "out/test/unit/**/*.test.js",
+  "timeout": 5000,
+  "ui": "tdd",
+  "color": true,
+  "reporter": "spec"
+}

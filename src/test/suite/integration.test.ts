@@ -6,6 +6,7 @@ import { DjangoProjectAnalyzer } from '../../analyzers/djangoProjectAnalyzer';
 import { AdvancedModelAnalyzer } from '../../analyzers/advancedModelAnalyzer';
 import * as sinon from 'sinon';
 import { createTestDjangoProjectAnalyzer } from '../container/testContainer';
+import { InMemoryFileSystem } from '../utils/mockHelpers';
 
 suite('Integration Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
@@ -17,7 +18,11 @@ suite('Integration Test Suite', () => {
     setup(() => {
         sandbox = sinon.createSandbox();
         pathConfigurator = new ProjectPathConfigurator();
-        projectAnalyzer = createTestDjangoProjectAnalyzer();
+        // Create InMemoryFileSystem with test project structure
+        const fs = new InMemoryFileSystem({
+            [path.join(testDjangoProjectPath, 'manage.py')]: '#!/usr/bin/env python\n# Django manage.py'
+        });
+        projectAnalyzer = createTestDjangoProjectAnalyzer(fs);
     });
 
     teardown(() => {
@@ -37,6 +42,12 @@ suite('Integration Test Suite', () => {
         // Mock file search to return our test manage.py
         const manageFile = vscode.Uri.file(path.join(testDjangoProjectPath, 'manage.py'));
         sandbox.stub(vscode.workspace, 'findFiles').resolves([manageFile]);
+        
+        // Mock fs.existsSync for ProjectPathConfigurator
+        const fs = require('fs');
+        sandbox.stub(fs, 'existsSync')
+            .withArgs(path.join(testDjangoProjectPath, 'manage.py'))
+            .returns(true);
 
         // Mock configuration
         const mockConfig = {
@@ -86,11 +97,8 @@ suite('Integration Test Suite', () => {
 
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([testWorkspaceFolder]);
         
-        // Mock file system checks
-        const fs = require('fs');
-        sandbox.stub(fs, 'existsSync')
-            .withArgs(path.join(testDjangoProjectPath, 'manage.py'))
-            .returns(true);
+        // Mock findFiles to return empty array (no additional files to analyze)
+        sandbox.stub(vscode.workspace, 'findFiles').resolves([]);
 
         // Initialize the analyzer
         const initialized = await projectAnalyzer.initialize();

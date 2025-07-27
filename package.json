@@ -2,7 +2,7 @@
   "name": "django-power-tools",
   "displayName": "Django Power Tools",
   "description": "Powerful Django development tools for VS Code",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -116,7 +116,8 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "test:coverage": "nyc npm test",
+    "test:coverage": "c8 --reporter=html --reporter=text npm test",
+    "test:unit": "mocha out/test/unit/**/*.test.js",
     "package": "vsce package",
     "publish": "vsce publish",
     "deploy": "npm run test && npm run package && npm run publish"
@@ -130,20 +131,20 @@
     "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
+    "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.2.0",
+    "c8": "^10.1.3",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
+    "inversify": "^7.6.1",
     "mocha": "^10.1.0",
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
+    "reflect-metadata": "^0.2.2",
     "sinon": "^21.0.0",
     "typescript": "^4.9.3"
   },
   "extensionDependencies": [
     "ms-python.python"
-  ],
-  "dependencies": {
-    "inversify": "^7.6.1",
-    "reflect-metadata": "^0.2.2"
-  }
+  ]
 }
