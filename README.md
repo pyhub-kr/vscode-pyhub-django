@@ -22,6 +22,7 @@
 | **다중 프로젝트 지원** | 하나의 워크스페이스에서 여러 Django 프로젝트 관리 | ✅ 완료 |
 | **파일 간 하이퍼링크** | Go to Definition으로 URL, View, Template 간 빠른 이동 | ✅ 완료 |
 | **컨텍스트 인식 템플릿 자동완성** | View에서 Template으로 전달되는 context 변수 자동완성 | ✅ 완료 |
+| **정적 파일 경로 자동완성** | `{% static %}` 태그에서 정적 파일 경로 자동완성 | ✅ 완료 |
 
 ### 🔥 주요 차별점
 - **제로 구성**: 프로젝트를 열면 자동으로 Django 환경 감지 및 설정
@@ -73,6 +74,15 @@ View에서 Template으로 전달되는 context 변수를 분석하여 템플릿�
 - ✅ **QuerySet 메서드**: `{{ posts.count }}`, `{{ posts.first }}` 등 QuerySet 메서드 지원
 - ✅ **Form 메서드**: `{{ form.as_p }}`, `{{ form.errors }}` 등 Form 렌더링 메서드 제공
 - ✅ **Loop 변수 인식**: `{% for post in posts %}` 내부에서 `{{ post }}` 변수 자동완성
+
+### 📁 정적 파일 경로 자동완성
+Django 템플릿에서 정적 파일 경로를 쉽게 찾고 입력할 수 있습니다.
+
+- ✅ **Static 태그 지원**: `{% static 'css/style.css' %}` 태그에서 파일 경로 자동완성
+- ✅ **디렉토리 구조 탐색**: 중첩된 디렉토리 구조를 쉽게 탐색
+- ✅ **파일 타입 아이콘**: CSS, JS, 이미지 등 파일 타입별 아이콘 표시
+- ✅ **파일 크기 정보**: 각 파일의 크기 정보 제공
+- ✅ **실시간 업데이트**: 정적 파일 추가/삭제 시 자동 업데이트
 
 ## 📦 설치
 
@@ -189,6 +199,21 @@ def post_list(request):
 
 <!-- QuerySet 메서드 자동완성 -->
 <p>Total posts: {{ posts.count }}</p>
+```
+
+### 정적 파일 경로 자동완성
+```django
+{% load static %}
+
+<!-- CSS 파일 -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!-- 자동완성으로 쉽게 찾기 -->
+
+<!-- 중첩된 디렉토리 구조 -->
+<script src="{% static 'js/components/header.js' %}"></script>
+
+<!-- 이미지 파일 -->
+<img src="{% static 'images/logo.png' %}" alt="Logo">
 ```
 
 ### manage.py 명령 실행

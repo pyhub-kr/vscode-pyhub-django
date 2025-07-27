@@ -9,7 +9,9 @@ import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider'
 import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletionProvider';
 import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
 import { TemplateContextCompletionProvider } from '../providers/templateContextCompletionProvider';
+import { StaticPathCompletionProvider } from '../providers/staticPathCompletionProvider';
 import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
+import { StaticFileAnalyzer } from '../analyzers/staticFileAnalyzer';
 
 @injectable()
 export class CompletionService {
@@ -20,18 +22,23 @@ export class CompletionService {
         @inject(TYPES.DjangoProjectAnalyzer) private projectAnalyzer: DjangoProjectAnalyzer,
         @inject(TYPES.UrlPatternAnalyzer) private urlPatternAnalyzer: UrlPatternAnalyzer,
         @inject(TYPES.DjangoFormAnalyzer) private formAnalyzer: DjangoFormAnalyzer,
+        @inject(TYPES.StaticFileAnalyzer) private staticFileAnalyzer: StaticFileAnalyzer,
         @inject(TYPES.DjangoModelCompletionProvider) private modelCompletionProvider: DjangoModelCompletionProvider,
         @inject(TYPES.DjangoFieldCompletionProvider) private fieldCompletionProvider: DjangoFieldCompletionProvider,
         @inject(TYPES.EnhancedCompletionProvider) private enhancedCompletionProvider: EnhancedCompletionProvider,
         @inject(TYPES.UrlTagCompletionProvider) private urlTagCompletionProvider: UrlTagCompletionProvider,
         @inject(TYPES.DjangoFormsCompletionProvider) private formsCompletionProvider: DjangoFormsCompletionProvider,
         @inject(TYPES.DjangoModelFormCompletionProvider) private modelFormCompletionProvider: DjangoModelFormCompletionProvider,
-        @inject(TYPES.TemplateContextCompletionProvider) private templateContextCompletionProvider: TemplateContextCompletionProvider
+        @inject(TYPES.TemplateContextCompletionProvider) private templateContextCompletionProvider: TemplateContextCompletionProvider,
+        @inject(TYPES.StaticPathCompletionProvider) private staticPathCompletionProvider: StaticPathCompletionProvider
     ) {}
 
     async register(): Promise<void> {
         // First, scan for forms
         await this.formAnalyzer.scanWorkspace();
+        
+        // Initialize static file analyzer
+        await this.staticFileAnalyzer.initialize();
         
         // Register enhanced completion provider with higher priority
         this.disposables.push(
@@ -109,6 +116,18 @@ export class CompletionService {
             )
         );
 
+        // Register static file path completion provider
+        this.disposables.push(
+            vscode.languages.registerCompletionItemProvider(
+                [
+                    { scheme: 'file', language: 'html' },
+                    { scheme: 'file', language: 'django-html' }
+                ],
+                this.staticPathCompletionProvider,
+                "'", '"', '/'  // Trigger on quotes and slash
+            )
+        );
+
         // Add disposables to extension context
         this.context.subscriptions.push(...this.disposables);
     }
@@ -116,5 +135,6 @@ export class CompletionService {
     dispose(): void {
         this.disposables.forEach(d => d.dispose());
         this.disposables = [];
+        this.staticFileAnalyzer.dispose();
     }
 }
