@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Comprehensive Django Forms autocomplete support:
+  - Form field types (CharField, EmailField, IntegerField, etc.)
+  - Field parameters (required, label, help_text, widget, etc.)
+  - Widget types (TextInput, Select, RadioSelect, etc.)
+  - Clean method generation (clean, clean_fieldname)
+- ModelForm specific features:
+  - Meta class options autocomplete
+  - Model selection from project models
+  - Field list autocomplete based on selected model
+  - Widget and label customization support
+- Real-time form analysis with file watching
+- Integration with existing Django project analyzer
+
+### Improved
+- Performance optimization for large Django projects
+- Enhanced caching strategy with memory-aware LRU cache
+- Progressive file analysis with background processing
+- File watcher debouncing for better performance
+
 ## [0.1.3] - 2025-07-27
 
 ### Fixed

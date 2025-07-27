@@ -11,6 +11,7 @@ export const TYPES = {
     DjangoProjectAnalyzer: Symbol.for('DjangoProjectAnalyzer'),
     AdvancedModelAnalyzer: Symbol.for('AdvancedModelAnalyzer'),
     UrlPatternAnalyzer: Symbol.for('UrlPatternAnalyzer'),
+    DjangoFormAnalyzer: Symbol.for('DjangoFormAnalyzer'),
     
     // Configuration
     ProjectPathConfigurator: Symbol.for('ProjectPathConfigurator'),
@@ -24,6 +25,8 @@ export const TYPES = {
     DjangoFieldCompletionProvider: Symbol.for('DjangoFieldCompletionProvider'),
     EnhancedCompletionProvider: Symbol.for('EnhancedCompletionProvider'),
     UrlTagCompletionProvider: Symbol.for('UrlTagCompletionProvider'),
+    DjangoFormsCompletionProvider: Symbol.for('DjangoFormsCompletionProvider'),
+    DjangoModelFormCompletionProvider: Symbol.for('DjangoModelFormCompletionProvider'),
     
     // Services
     ExtensionService: Symbol.for('ExtensionService'),
