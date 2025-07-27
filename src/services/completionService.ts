@@ -6,6 +6,8 @@ import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
 import { DjangoModelCompletionProvider, DjangoFieldCompletionProvider } from '../providers/djangoModelCompletionProvider';
 import { EnhancedCompletionProvider } from '../providers/enhancedCompletionProvider';
 import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider';
+import { TemplatePathDefinitionProvider } from '../providers/templatePathDefinitionProvider';
+import { TemplateVariableCompletionProvider } from '../providers/templateVariableCompletionProvider';
 
 @injectable()
 export class CompletionService {
@@ -18,7 +20,9 @@ export class CompletionService {
         @inject(TYPES.DjangoModelCompletionProvider) private modelCompletionProvider: DjangoModelCompletionProvider,
         @inject(TYPES.DjangoFieldCompletionProvider) private fieldCompletionProvider: DjangoFieldCompletionProvider,
         @inject(TYPES.EnhancedCompletionProvider) private enhancedCompletionProvider: EnhancedCompletionProvider,
-        @inject(TYPES.UrlTagCompletionProvider) private urlTagCompletionProvider: UrlTagCompletionProvider
+        @inject(TYPES.UrlTagCompletionProvider) private urlTagCompletionProvider: UrlTagCompletionProvider,
+        @inject(TYPES.TemplatePathDefinitionProvider) private templatePathDefinitionProvider: TemplatePathDefinitionProvider,
+        @inject(TYPES.TemplateVariableCompletionProvider) private templateVariableCompletionProvider: TemplateVariableCompletionProvider
     ) {}
 
     async register(): Promise<void> {
@@ -66,6 +70,26 @@ export class CompletionService {
                 { scheme: 'file', language: 'python' },
                 this.fieldCompletionProvider,
                 '.'
+            )
+        );
+        
+        // Register template path definition provider for Python files
+        this.disposables.push(
+            vscode.languages.registerDefinitionProvider(
+                { scheme: 'file', language: 'python' },
+                this.templatePathDefinitionProvider
+            )
+        );
+        
+        // Register template variable completion provider
+        this.disposables.push(
+            vscode.languages.registerCompletionItemProvider(
+                [
+                    { scheme: 'file', language: 'html' },
+                    { scheme: 'file', language: 'django-html' }
+                ],
+                this.templateVariableCompletionProvider,
+                '.', '{', ' '  // Trigger on dot, brace, and space
             )
         );
 

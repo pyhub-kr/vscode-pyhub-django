@@ -7,6 +7,7 @@ import { AdvancedModelAnalyzer } from '../../../analyzers/advancedModelAnalyzer'
 import { UrlPatternAnalyzer } from '../../../analyzers/urlPatternAnalyzer';
 import { ProjectPathConfigurator } from '../../../projectPathConfigurator';
 import { createTestDjangoProjectAnalyzer } from '../../container/testContainer';
+import { InMemoryFileSystem } from '../../utils/mockHelpers';
 
 suite('E2E - Different Project Structures', () => {
     let sandbox: sinon.SinonSandbox;
@@ -22,7 +23,23 @@ suite('E2E - Different Project Structures', () => {
 
     test('should handle simple blog project structure', async () => {
         const projectPath = path.join(fixturesPath, 'simple-blog');
-        const analyzer = createTestDjangoProjectAnalyzer();
+        
+        // Create InMemoryFileSystem with manage.py and model files
+        const fs = new InMemoryFileSystem({
+            [path.join(projectPath, 'manage.py')]: '#!/usr/bin/env python\n# Django manage.py',
+            [path.join(projectPath, 'blog/models.py')]: `from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    content = models.TextField()`
+        });
+        
+        const analyzer = createTestDjangoProjectAnalyzer(fs);
         
         // Mock workspace to point to our test project
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([{
@@ -41,7 +58,7 @@ suite('E2E - Different Project Structures', () => {
 
         // Use the advanced analyzer directly
         const advancedAnalyzer = analyzer.getAdvancedAnalyzer();
-        const modelContent = require('fs').readFileSync(path.join(projectPath, 'blog/models.py'), 'utf8');
+        const modelContent = fs.readFileSync(path.join(projectPath, 'blog/models.py'), 'utf8');
         await advancedAnalyzer.analyzeModelCode(modelContent, 'blog/models.py');
 
         const models = advancedAnalyzer.getAllModels();

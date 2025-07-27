@@ -10,6 +10,7 @@ import { UrlTagCompletionProvider } from '../../../providers/urlTagCompletionPro
 import { ManagePyCommandHandler } from '../../../commands/managePyCommandHandler';
 import { PythonExecutor, PythonIntegration } from '../../../pythonIntegration';
 import { createTestDjangoProjectAnalyzer } from '../../container/testContainer';
+import { InMemoryFileSystem } from '../../utils/mockHelpers';
 
 /**
  * User Scenario-based End-to-End Tests
@@ -35,13 +36,22 @@ suite('E2E - User Scenarios', () => {
     test('Scenario: New developer opens Django project', async () => {
         // Step 1: Open Django project
         const projectPath = path.join(__dirname, '../../../../test/fixtures/sample-projects/simple-blog');
-        const analyzer = createTestDjangoProjectAnalyzer();
+        
+        // Create InMemoryFileSystem with Django project structure
+        const fs = new InMemoryFileSystem({
+            [path.join(projectPath, 'manage.py')]: '#!/usr/bin/env python\n# Django manage.py'
+        });
+        
+        const analyzer = createTestDjangoProjectAnalyzer(fs);
         
         sandbox.stub(vscode.workspace, 'workspaceFolders').value([{
             uri: vscode.Uri.file(projectPath),
             name: 'simple-blog',
             index: 0
         }]);
+        
+        // Mock findFiles to return empty array initially
+        sandbox.stub(vscode.workspace, 'findFiles').resolves([]);
 
         // Step 2: Extension auto-detects Django project
         const initialized = await analyzer.initialize();
@@ -192,7 +202,10 @@ Available subcommands:
      */
     test('Scenario: Full-stack developer workflow', async () => {
         // Initialize all analyzers
-        const projectAnalyzer = createTestDjangoProjectAnalyzer();
+        const fs = new InMemoryFileSystem({
+            ['/test/project/manage.py']: '#!/usr/bin/env python\n# Django manage.py'
+        });
+        const projectAnalyzer = createTestDjangoProjectAnalyzer(fs);
         const modelAnalyzer = new AdvancedModelAnalyzer();
         const urlAnalyzer = new UrlPatternAnalyzer();
         

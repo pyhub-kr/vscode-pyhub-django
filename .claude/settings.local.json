@@ -18,7 +18,23 @@
       "Bash(git push:*)",
       "Bash(npm run test:unit:*)",
       "Bash(vsce package:*)",
-      "Bash(gh release upload:*)"
+      "Bash(gh release upload:*)",
+      "Bash(code:*)",
+      "Bash(python:*)",
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(django-admin startproject:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue close:*)",
+      "Bash(gh issue create:*)",
+      "Bash(find:*)",
+      "Bash(git checkout:*)",
+      "Bash(npm run test:coverage:*)",
+      "Bash(npx nyc --reporter=text npm run test:unit)"
     ],
     "deny": []
   }

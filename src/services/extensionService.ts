@@ -8,6 +8,7 @@ import { ProjectPathConfigurator } from '../projectPathConfigurator';
 import { CompletionService } from './completionService';
 import { CommandService } from './commandService';
 import { FileWatcherService } from './fileWatcherService';
+import { ViewTemplateMapperService } from './viewTemplateMapperService';
 
 @injectable()
 export class ExtensionService {
@@ -19,7 +20,8 @@ export class ExtensionService {
         @inject(TYPES.ProjectPathConfigurator) private pathConfigurator: ProjectPathConfigurator,
         @inject(TYPES.CompletionService) private completionService: CompletionService,
         @inject(TYPES.CommandService) private commandService: CommandService,
-        @inject(TYPES.FileWatcherService) private fileWatcherService: FileWatcherService
+        @inject(TYPES.FileWatcherService) private fileWatcherService: FileWatcherService,
+        @inject(TYPES.ViewTemplateMapperService) private viewTemplateMapperService: ViewTemplateMapperService
     ) {}
 
     async initialize(): Promise<void> {
@@ -65,5 +67,6 @@ export class ExtensionService {
     dispose(): void {
         this.pythonIntegration.dispose();
         this.commandService.dispose();
+        this.viewTemplateMapperService.dispose();
     }
 }

@@ -10,6 +10,8 @@ import { DjangoProjectAnalyzer } from '../analyzers/djangoProjectAnalyzer';
 import { OptimizedDjangoProjectAnalyzer } from '../analyzers/optimizedDjangoProjectAnalyzer';
 import { AdvancedModelAnalyzer } from '../analyzers/advancedModelAnalyzer';
 import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
+import { TemplatePathResolver } from '../analyzers/templatePathResolver';
+import { TemplateContextAnalyzer } from '../analyzers/templateContextAnalyzer';
 
 // Configuration
 import { ProjectPathConfigurator } from '../projectPathConfigurator';
@@ -22,12 +24,15 @@ import { PerformanceCommands } from '../commands/performanceCommands';
 import { DjangoModelCompletionProvider, DjangoFieldCompletionProvider } from '../providers/djangoModelCompletionProvider';
 import { EnhancedCompletionProvider } from '../providers/enhancedCompletionProvider';
 import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider';
+import { TemplatePathDefinitionProvider } from '../providers/templatePathDefinitionProvider';
+import { TemplateVariableCompletionProvider } from '../providers/templateVariableCompletionProvider';
 
 // Services
 import { ExtensionService } from '../services/extensionService';
 import { CompletionService } from '../services/completionService';
 import { CommandService } from '../services/commandService';
 import { FileWatcherService } from '../services/fileWatcherService';
+import { ViewTemplateMapperService } from '../services/viewTemplateMapperService';
 
 export function createContainer(context: vscode.ExtensionContext): Container {
     const container = new Container();
@@ -49,6 +54,8 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     }
     container.bind<AdvancedModelAnalyzer>(TYPES.AdvancedModelAnalyzer).to(AdvancedModelAnalyzer).inSingletonScope();
     container.bind<UrlPatternAnalyzer>(TYPES.UrlPatternAnalyzer).to(UrlPatternAnalyzer).inSingletonScope();
+    container.bind<TemplatePathResolver>(TYPES.TemplatePathResolver).to(TemplatePathResolver).inSingletonScope();
+    container.bind<TemplateContextAnalyzer>(TYPES.TemplateContextAnalyzer).to(TemplateContextAnalyzer).inSingletonScope();
     
     // Configuration - Singleton
     container.bind<ProjectPathConfigurator>(TYPES.ProjectPathConfigurator).to(ProjectPathConfigurator).inSingletonScope();
@@ -62,12 +69,15 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<DjangoFieldCompletionProvider>(TYPES.DjangoFieldCompletionProvider).to(DjangoFieldCompletionProvider);
     container.bind<EnhancedCompletionProvider>(TYPES.EnhancedCompletionProvider).to(EnhancedCompletionProvider);
     container.bind<UrlTagCompletionProvider>(TYPES.UrlTagCompletionProvider).to(UrlTagCompletionProvider);
+    container.bind<TemplatePathDefinitionProvider>(TYPES.TemplatePathDefinitionProvider).to(TemplatePathDefinitionProvider);
+    container.bind<TemplateVariableCompletionProvider>(TYPES.TemplateVariableCompletionProvider).to(TemplateVariableCompletionProvider);
     
     // Services - Singleton
     container.bind<ExtensionService>(TYPES.ExtensionService).to(ExtensionService).inSingletonScope();
     container.bind<CompletionService>(TYPES.CompletionService).to(CompletionService).inSingletonScope();
     container.bind<CommandService>(TYPES.CommandService).to(CommandService).inSingletonScope();
     container.bind<FileWatcherService>(TYPES.FileWatcherService).to(FileWatcherService).inSingletonScope();
+    container.bind<ViewTemplateMapperService>(TYPES.ViewTemplateMapperService).to(ViewTemplateMapperService).inSingletonScope();
     
     return container;
 }
