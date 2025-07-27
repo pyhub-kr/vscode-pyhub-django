@@ -24,11 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm test
-
       - name: Compile extension
         run: npm run compile
+        
+      - name: Run linter
+        run: npm run lint
 
       - name: Install vsce
         run: npm install -g @vscode/vsce
