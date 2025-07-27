@@ -81,7 +81,9 @@ export class DjangoModelFormCompletionProvider implements vscode.CompletionItemP
      */
     private isModelFormFile(document: vscode.TextDocument): boolean {
         const text = document.getText();
-        return text.includes('ModelForm') || text.includes('from django.forms import ModelForm');
+        return text.includes('ModelForm') || 
+               text.includes('from django.forms import ModelForm') ||
+               text.includes('forms.ModelForm');
     }
 
     /**

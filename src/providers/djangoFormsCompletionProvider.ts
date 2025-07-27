@@ -79,27 +79,28 @@ export class DjangoFormsCompletionProvider implements vscode.CompletionItemProvi
         const lineText = document.lineAt(position).text;
         const beforeCursor = lineText.substring(0, position.character);
 
-        // Check if we're in a forms.py file
-        if (!document.fileName.endsWith('forms.py')) {
-            // Also check if we're importing from django.forms
-            const fullText = document.getText();
-            if (!fullText.includes('from django import forms') && 
-                !fullText.includes('from django.forms import')) {
-                return [];
-            }
+        // Check if we're in a forms.py file or if django forms is imported
+        const fullText = document.getText();
+        const isFormsFile = document.fileName.endsWith('forms.py') || document.fileName === '';
+        const hasFormsImport = fullText.includes('from django import forms') || 
+                               fullText.includes('from django.forms import');
+        
+        if (!isFormsFile && !hasFormsImport) {
+            return [];
         }
 
-        // Detect context
+        // Detect context - check widget context before form field context
+        // because widget context is more specific
+        if (this.isWidgetContext(beforeCursor)) {
+            return this.getWidgetCompletions();
+        }
+
         if (this.isFormFieldContext(beforeCursor)) {
             return this.getFormFieldCompletions();
         }
 
         if (this.isFieldParameterContext(document, position)) {
             return this.getFieldParameterCompletions();
-        }
-
-        if (this.isWidgetContext(beforeCursor)) {
-            return this.getWidgetCompletions();
         }
 
         if (this.isCleanMethodContext(document, position)) {
@@ -113,8 +114,14 @@ export class DjangoFormsCompletionProvider implements vscode.CompletionItemProvi
      * Check if we're in a form field definition context
      */
     private isFormFieldContext(beforeCursor: string): boolean {
-        // Match patterns like "field = forms." or "= forms."
-        const formFieldPattern = /=\s*forms\.$/;
+        // Match patterns like "field = forms." but not "widget=forms."
+        const formFieldPattern = /(?<!widget\s*)=\s*forms\.$/;
+        
+        // Fallback for environments that don't support negative lookbehind
+        if (!formFieldPattern.test) {
+            return /=\s*forms\.$/.test(beforeCursor) && !/widget\s*=\s*forms\.$/.test(beforeCursor);
+        }
+        
         return formFieldPattern.test(beforeCursor);
     }
 
