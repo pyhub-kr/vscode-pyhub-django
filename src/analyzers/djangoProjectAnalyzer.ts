@@ -37,13 +37,13 @@ interface UrlPattern {
 
 @injectable()
 export class DjangoProjectAnalyzer {
-    private projectRoot: string | undefined;
-    private modelCache: Map<string, ModelInfo> = new Map();
-    private urlPatternCache: Map<string, UrlPattern> = new Map();
-    private settingsCache: any = {};
-    private advancedAnalyzer: AdvancedModelAnalyzer;
-    private pythonParser: PythonParser;
-    private fileSystem: FileSystem;
+    protected projectRoot: string | undefined;
+    protected modelCache: Map<string, ModelInfo> = new Map();
+    protected urlPatternCache: Map<string, UrlPattern> = new Map();
+    protected settingsCache: any = {};
+    protected advancedAnalyzer: AdvancedModelAnalyzer;
+    protected pythonParser: PythonParser;
+    protected fileSystem: FileSystem;
 
     constructor(
         @inject(TYPES.AdvancedModelAnalyzer) advancedAnalyzer: AdvancedModelAnalyzer,
@@ -115,7 +115,7 @@ export class DjangoProjectAnalyzer {
         });
     }
 
-    private async onPythonFileChanged(uri: vscode.Uri): Promise<void> {
+    protected async onPythonFileChanged(uri: vscode.Uri): Promise<void> {
         const filePath = uri.fsPath;
         
         if (filePath.endsWith('models.py')) {
@@ -144,7 +144,7 @@ export class DjangoProjectAnalyzer {
         }
     }
 
-    private getAppNameFromPath(filePath: string): string | undefined {
+    protected getAppNameFromPath(filePath: string): string | undefined {
         if (!this.projectRoot) {
             return undefined;
         }
@@ -178,7 +178,7 @@ export class DjangoProjectAnalyzer {
         console.log('Django project analysis completed');
     }
 
-    private async findSettingsFile(): Promise<string | undefined> {
+    protected async findSettingsFile(): Promise<string | undefined> {
         if (!this.projectRoot) {
             return undefined;
         }
@@ -205,7 +205,7 @@ export class DjangoProjectAnalyzer {
         return files.length > 0 ? files[0].fsPath : undefined;
     }
 
-    private async analyzeSettings(settingsPath: string): Promise<void> {
+    protected async analyzeSettings(settingsPath: string): Promise<void> {
         try {
             const content = this.fileSystem.readFileSync(settingsPath, 'utf8') as string;
             
@@ -254,7 +254,7 @@ export class DjangoProjectAnalyzer {
         }
     }
 
-    private async analyzeModels(filePath: string): Promise<void> {
+    protected async analyzeModels(filePath: string): Promise<void> {
         try {
             const content = this.fileSystem.readFileSync(filePath, 'utf8') as string;
             
@@ -334,7 +334,7 @@ export class DjangoProjectAnalyzer {
         }
     }
 
-    private async analyzeUrls(filePath: string): Promise<void> {
+    protected async analyzeUrls(filePath: string): Promise<void> {
         try {
             const content = this.fileSystem.readFileSync(filePath, 'utf8') as string;
             
