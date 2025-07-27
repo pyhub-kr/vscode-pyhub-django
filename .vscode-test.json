@@ -1,0 +1,17 @@
+{
+  "tests": [
+    {
+      "version": "insiders",
+      "extensions": [
+        "ms-python.python"
+      ],
+      "files": [
+        "out/test/runTest.js"
+      ],
+      "workspaceFolder": "./test/fixtures/test-django-project",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
+  ]
+}

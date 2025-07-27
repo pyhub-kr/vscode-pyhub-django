@@ -1,0 +1,13 @@
+{
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/test/**/*",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts"
+  ],
+  "reporter": ["html", "text", "lcov"],
+  "sourceMap": true,
+  "reportDir": "./coverage",
+  "all": true,
+  "skipFull": true
+}
