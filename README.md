@@ -5,7 +5,26 @@
 [![VS Code Marketplace](https://img.shields.io/vscode-marketplace/v/pyhub-kr.django-power-tools.svg)](https://marketplace.visualstudio.com/items?itemName=pyhub-kr.django-power-tools)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-🚀 **Django Power Tools**는 VS Code에서 PyCharm과 같은 강력한 Django 개발 경험을 제공하는 확장 프로그램입니다. Django 개발자가 겪는 주요 문제점들을 해결하여 생산성을 크게 향상시킵니다.
+🚀 **Django Power Tools**는 VS Code에서 PyCharm과 같은 강력한 Django 개발 경험을 제공하는 확장 프로그램입니다.
+
+## 🎯 핵심 기능 요약
+
+| 기능 | 설명 | 지원 상태 |
+|------|------|-----------|
+| **자동 Import 경로 설정** | Django 프로젝트를 자동 감지하여 Python 경로 구성 | ✅ 완료 |
+| **Django ORM 자동완성** | `objects.filter()`, `exclude()` 등 30+ QuerySet 메서드 | ✅ 완료 |
+| **모델 필드 IntelliSense** | 모델 필드 및 lookup 자동완성 (`title__icontains` 등) | ✅ 완료 |
+| **Related Name 자동완성** | ForeignKey/ManyToMany의 related_name 지원 | ✅ 완료 |
+| **URL 태그 자동완성** | 템플릿에서 `{% url 'name' %}` 태그 자동완성 | ✅ 완료 |
+| **커스텀 매니저 지원** | 사용자 정의 매니저 메서드 인식 및 자동완성 | ✅ 완료 |
+| **manage.py 명령 통합** | VS Code에서 직접 Django 명령 실행 | ✅ 완료 |
+| **다중 프로젝트 지원** | 하나의 워크스페이스에서 여러 Django 프로젝트 관리 | ✅ 완료 |
+
+### 🔥 주요 차별점
+- **제로 구성**: 프로젝트를 열면 자동으로 Django 환경 감지 및 설정
+- **실시간 업데이트**: 모델 변경 시 즉시 자동완성 목록 갱신
+- **PyCharm 수준의 IntelliSense**: Django 전용 코드 완성 기능
+- **경량화**: 빠른 시작과 낮은 메모리 사용량
 
 ## 📌 주요 기능
 
