@@ -1,0 +1,21 @@
+{
+    "version": "0.0.1",
+    "vscodeVersion": "1.74.0",
+    "testFiles": [
+        "out/test/e2e/**/*.test.js"
+    ],
+    "launchArgs": [
+        "--disable-extensions",
+        "--disable-workspace-trust"
+    ],
+    "mocha": {
+        "timeout": 60000,
+        "retries": 0,
+        "bail": false,
+        "slow": 20000
+    },
+    "setup": {
+        "cleanup": true,
+        "installExtension": true
+    }
+}

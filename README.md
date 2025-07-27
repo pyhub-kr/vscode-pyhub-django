@@ -36,6 +36,9 @@
 ### 🔧 스마트 경로 구성
 Django 프로젝트를 자동으로 감지하고 Python 경로를 구성하여 import 오류를 해결합니다.
 
+<!-- TODO: Add initial-setup.gif -->
+![Initial Setup](images/gifs/initial-setup.gif)
+
 - ✅ `manage.py` 자동 감지
 - ✅ Python 분석 경로 자동 설정
 - ✅ 다중 Django 프로젝트 지원
@@ -43,6 +46,9 @@ Django 프로젝트를 자동으로 감지하고 Python 경로를 구성하여 i
 
 ### 🧠 Django 인식 IntelliSense
 Django의 모든 구성 요소에 대한 지능적인 자동 완성을 제공합니다.
+
+<!-- TODO: Add orm-autocomplete.gif -->
+![ORM Autocomplete](images/gifs/orm-autocomplete.gif)
 
 - ✅ **ORM 메서드**: `filter()`, `exclude()`, `annotate()` 등 30+ QuerySet 메서드
 - ✅ **모델 필드**: 모든 필드 타입과 lookup 지원
@@ -54,6 +60,9 @@ Django의 모든 구성 요소에 대한 지능적인 자동 완성을 제공합
 ### 🎯 워크플로우 자동화
 반복적인 Django 작업을 간소화합니다.
 
+<!-- TODO: Add manage-py-commands.gif -->
+![Manage.py Commands](images/gifs/manage-py-commands.gif)
+
 - ✅ **manage.py 명령 팔레트**: VS Code에서 직접 Django 명령 실행
 - ✅ **빠른 액세스 명령**: runserver, migrate, makemigrations 등
 - ✅ **명령 히스토리**: 최근 사용한 명령 기억
@@ -61,6 +70,9 @@ Django의 모든 구성 요소에 대한 지능적인 자동 완성을 제공합
 
 ### 🔗 파일 간 하이퍼링크 (Go to Definition)
 Django 프로젝트의 파일 간 빠른 탐색을 지원합니다.
+
+<!-- TODO: Add cross-file-navigation.gif -->
+![Cross-file Navigation](images/gifs/cross-file-navigation.gif)
 
 - ✅ **템플릿 → URL 패턴**: `{% url 'name' %}`에서 Cmd/Ctrl+Click으로 urls.py의 정의로 이동
 - ✅ **URL → View**: urls.py의 view 참조에서 해당 view 정의로 이동
@@ -143,6 +155,9 @@ post.save()  # 메서드 제안
 ```
 
 ### URL 태그 자동 완성
+<!-- TODO: Add url-tag-completion.gif -->
+![URL Tag Completion](images/gifs/url-tag-completion.gif)
+
 ```django
 <!-- templates/blog/post_list.html -->
 <a href="{% url 'blog:post_detail' pk=post.pk %}">
@@ -154,6 +169,9 @@ post.save()  # 메서드 제안
 ```
 
 ### Django Forms 자동 완성
+<!-- TODO: Add forms-autocomplete.gif -->
+![Forms Autocomplete](images/gifs/forms-autocomplete.gif)
+
 ```python
 from django import forms
 from myapp.models import User

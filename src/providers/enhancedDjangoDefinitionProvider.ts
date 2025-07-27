@@ -161,9 +161,9 @@ export class EnhancedDjangoDefinitionProvider implements vscode.DefinitionProvid
         }
         
         // Otherwise, search for the pattern in the file
-        const position = await this.findPositionInFile(urlPattern.filePath, `name=['"]${urlPattern.name}['"]`);
-        if (position) {
-            return new vscode.Location(vscode.Uri.file(urlPattern.filePath), position);
+        const foundPosition = await this.findPositionInFile(urlPattern.filePath, `name=['"]${urlPattern.name}['"]`);
+        if (foundPosition) {
+            return new vscode.Location(vscode.Uri.file(urlPattern.filePath), foundPosition);
         }
         
         return undefined;

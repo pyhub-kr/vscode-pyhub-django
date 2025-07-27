@@ -33,7 +33,7 @@ suite('Cross-file Navigation Performance Benchmarks', () => {
         // Create services
         fileWatcherService = new EnhancedFileWatcherService(mockContext);
         urlAnalyzer = new EnhancedUrlPatternAnalyzer(fileWatcherService);
-        projectAnalyzer = new DjangoProjectAnalyzer();
+        projectAnalyzer = new DjangoProjectAnalyzer(mockContext);
         definitionProvider = new EnhancedDjangoDefinitionProvider(projectAnalyzer, urlAnalyzer);
     });
 
@@ -83,7 +83,8 @@ suite('Cross-file Navigation Performance Benchmarks', () => {
         sandbox.stub(vscode.workspace, 'findFiles').resolves(mockFiles);
         
         // Mock openTextDocument
-        sandbox.stub(vscode.workspace, 'openTextDocument').callsFake((uri: vscode.Uri) => {
+        sandbox.stub(vscode.workspace, 'openTextDocument').callsFake((options: any) => {
+            const uri = options as vscode.Uri;
             const appIndex = parseInt(uri.path.match(/app(\d+)/)?.[1] || '0');
             return Promise.resolve({
                 getText: () => generateUrlFileForApp(appIndex, 20)
@@ -158,7 +159,7 @@ suite('Cross-file Navigation Performance Benchmarks', () => {
         // Check cache statistics
         const metrics = urlAnalyzer.getPerformanceMetrics();
         
-        assert.ok(metrics.cacheHitRate > 0, 'Should have cache hits');
+        assert.ok(metrics.cacheHits > 0, 'Should have cache hits');
         assert.ok(metrics.parseTime < 10000, 'Total parse time should be reasonable');
     });
 

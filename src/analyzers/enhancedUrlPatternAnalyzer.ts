@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 import { TYPES } from '../container/types';
 import { FileCache } from '../cache/lruCache';
-import { FileWatcherService } from '../services/fileWatcherService';
+import { EnhancedFileWatcherService } from '../services/enhancedFileWatcherService';
 
 export interface UrlPattern {
     name: string;
@@ -49,7 +49,7 @@ export class EnhancedUrlPatternAnalyzer {
     };
 
     constructor(
-        @inject(TYPES.FileWatcherService) private fileWatcher: FileWatcherService
+        @inject(TYPES.EnhancedFileWatcherService) private fileWatcher: EnhancedFileWatcherService
     ) {
         // Initialize with larger cache for better performance
         this.fileCache = new FileCache<ParsedUrlFile>(500, 100);
@@ -60,7 +60,7 @@ export class EnhancedUrlPatternAnalyzer {
      * Setup file watcher for urls.py files
      */
     private setupFileWatcher(): void {
-        this.fileWatcher.watchPattern('**/urls.py', async (uri, changeType) => {
+        this.fileWatcher.watchPattern('**/urls.py', async (uri: vscode.Uri, changeType: vscode.FileChangeType) => {
             if (changeType === vscode.FileChangeType.Deleted) {
                 this.removeUrlsFromFile(uri.fsPath);
             } else {
@@ -327,9 +327,10 @@ export class EnhancedUrlPatternAnalyzer {
      */
     getPerformanceMetrics(): typeof this.performanceMetrics {
         return {
-            ...this.performanceMetrics,
-            cacheHitRate: this.performanceMetrics.cacheHits / 
-                (this.performanceMetrics.cacheHits + this.performanceMetrics.cacheMisses) || 0
+            cacheHits: this.performanceMetrics.cacheHits,
+            cacheMisses: this.performanceMetrics.cacheMisses,
+            parseTime: this.performanceMetrics.parseTime,
+            scanTime: this.performanceMetrics.scanTime
         };
     }
 

@@ -1,5 +1,4 @@
 export * from './djangoModelCompletionProvider';
-export * from './djangoFieldCompletionProvider'; 
 export * from './enhancedCompletionProvider';
 export * from './urlTagCompletionProvider';
 export * from './djangoFormsCompletionProvider';
