@@ -8,6 +8,7 @@ import { ProjectPathConfigurator } from '../projectPathConfigurator';
 import { CompletionService } from './completionService';
 import { CommandService } from './commandService';
 import { FileWatcherService } from './fileWatcherService';
+import { DefinitionService } from './definitionService';
 
 @injectable()
 export class ExtensionService {
@@ -19,7 +20,8 @@ export class ExtensionService {
         @inject(TYPES.ProjectPathConfigurator) private pathConfigurator: ProjectPathConfigurator,
         @inject(TYPES.CompletionService) private completionService: CompletionService,
         @inject(TYPES.CommandService) private commandService: CommandService,
-        @inject(TYPES.FileWatcherService) private fileWatcherService: FileWatcherService
+        @inject(TYPES.FileWatcherService) private fileWatcherService: FileWatcherService,
+        @inject(TYPES.DefinitionService) private definitionService: DefinitionService
     ) {}
 
     async initialize(): Promise<void> {
@@ -60,6 +62,7 @@ export class ExtensionService {
         await this.completionService.register();
         await this.commandService.register();
         await this.fileWatcherService.register();
+        await this.definitionService.register();
     }
 
     dispose(): void {

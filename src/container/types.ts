@@ -28,9 +28,13 @@ export const TYPES = {
     DjangoFormsCompletionProvider: Symbol.for('DjangoFormsCompletionProvider'),
     DjangoModelFormCompletionProvider: Symbol.for('DjangoModelFormCompletionProvider'),
     
+    // Definition Providers
+    DjangoDefinitionProvider: Symbol.for('DjangoDefinitionProvider'),
+    
     // Services
     ExtensionService: Symbol.for('ExtensionService'),
     CompletionService: Symbol.for('CompletionService'),
     CommandService: Symbol.for('CommandService'),
-    FileWatcherService: Symbol.for('FileWatcherService')
+    FileWatcherService: Symbol.for('FileWatcherService'),
+    DefinitionService: Symbol.for('DefinitionService')
 };
