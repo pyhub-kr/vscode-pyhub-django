@@ -11,6 +11,7 @@ export const TYPES = {
     DjangoProjectAnalyzer: Symbol.for('DjangoProjectAnalyzer'),
     AdvancedModelAnalyzer: Symbol.for('AdvancedModelAnalyzer'),
     UrlPatternAnalyzer: Symbol.for('UrlPatternAnalyzer'),
+    EnhancedUrlPatternAnalyzer: Symbol.for('EnhancedUrlPatternAnalyzer'),
     DjangoFormAnalyzer: Symbol.for('DjangoFormAnalyzer'),
     ViewContextAnalyzer: Symbol.for('ViewContextAnalyzer'),
     StaticFileAnalyzer: Symbol.for('StaticFileAnalyzer'),
@@ -34,11 +35,13 @@ export const TYPES = {
     
     // Definition Providers
     DjangoDefinitionProvider: Symbol.for('DjangoDefinitionProvider'),
+    EnhancedDjangoDefinitionProvider: Symbol.for('EnhancedDjangoDefinitionProvider'),
     
     // Services
     ExtensionService: Symbol.for('ExtensionService'),
     CompletionService: Symbol.for('CompletionService'),
     CommandService: Symbol.for('CommandService'),
     FileWatcherService: Symbol.for('FileWatcherService'),
+    EnhancedFileWatcherService: Symbol.for('EnhancedFileWatcherService'),
     DefinitionService: Symbol.for('DefinitionService')
 };
