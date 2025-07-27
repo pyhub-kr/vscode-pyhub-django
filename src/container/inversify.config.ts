@@ -10,6 +10,7 @@ import { DjangoProjectAnalyzer } from '../analyzers/djangoProjectAnalyzer';
 import { OptimizedDjangoProjectAnalyzer } from '../analyzers/optimizedDjangoProjectAnalyzer';
 import { AdvancedModelAnalyzer } from '../analyzers/advancedModelAnalyzer';
 import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
+import { EnhancedUrlPatternAnalyzer } from '../analyzers/enhancedUrlPatternAnalyzer';
 import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
 import { ViewContextAnalyzer } from '../analyzers/viewContextAnalyzer';
 import { StaticFileAnalyzer } from '../analyzers/staticFileAnalyzer';
@@ -32,12 +33,14 @@ import { StaticPathCompletionProvider } from '../providers/staticPathCompletionP
 
 // Definition providers
 import { DjangoDefinitionProvider } from '../providers/djangoDefinitionProvider';
+import { EnhancedDjangoDefinitionProvider } from '../providers/enhancedDjangoDefinitionProvider';
 
 // Services
 import { ExtensionService } from '../services/extensionService';
 import { CompletionService } from '../services/completionService';
 import { CommandService } from '../services/commandService';
 import { FileWatcherService } from '../services/fileWatcherService';
+import { EnhancedFileWatcherService } from '../services/enhancedFileWatcherService';
 import { DefinitionService } from '../services/definitionService';
 
 export function createContainer(context: vscode.ExtensionContext): Container {
@@ -60,6 +63,7 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     }
     container.bind<AdvancedModelAnalyzer>(TYPES.AdvancedModelAnalyzer).to(AdvancedModelAnalyzer).inSingletonScope();
     container.bind<UrlPatternAnalyzer>(TYPES.UrlPatternAnalyzer).to(UrlPatternAnalyzer).inSingletonScope();
+    container.bind<EnhancedUrlPatternAnalyzer>(TYPES.EnhancedUrlPatternAnalyzer).to(EnhancedUrlPatternAnalyzer).inSingletonScope();
     container.bind<DjangoFormAnalyzer>(TYPES.DjangoFormAnalyzer).to(DjangoFormAnalyzer).inSingletonScope();
     container.bind<ViewContextAnalyzer>(TYPES.ViewContextAnalyzer).to(ViewContextAnalyzer).inSingletonScope();
     container.bind<StaticFileAnalyzer>(TYPES.StaticFileAnalyzer).to(StaticFileAnalyzer).inSingletonScope();
@@ -83,12 +87,14 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     
     // Definition providers - Transient
     container.bind<DjangoDefinitionProvider>(TYPES.DjangoDefinitionProvider).to(DjangoDefinitionProvider);
+    container.bind<EnhancedDjangoDefinitionProvider>(TYPES.EnhancedDjangoDefinitionProvider).to(EnhancedDjangoDefinitionProvider);
     
     // Services - Singleton
     container.bind<ExtensionService>(TYPES.ExtensionService).to(ExtensionService).inSingletonScope();
     container.bind<CompletionService>(TYPES.CompletionService).to(CompletionService).inSingletonScope();
     container.bind<CommandService>(TYPES.CommandService).to(CommandService).inSingletonScope();
     container.bind<FileWatcherService>(TYPES.FileWatcherService).to(FileWatcherService).inSingletonScope();
+    container.bind<EnhancedFileWatcherService>(TYPES.EnhancedFileWatcherService).to(EnhancedFileWatcherService).inSingletonScope();
     container.bind<DefinitionService>(TYPES.DefinitionService).to(DefinitionService).inSingletonScope();
     
     return container;
