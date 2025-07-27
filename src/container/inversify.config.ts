@@ -11,6 +11,8 @@ import { OptimizedDjangoProjectAnalyzer } from '../analyzers/optimizedDjangoProj
 import { AdvancedModelAnalyzer } from '../analyzers/advancedModelAnalyzer';
 import { UrlPatternAnalyzer } from '../analyzers/urlPatternAnalyzer';
 import { DjangoFormAnalyzer } from '../analyzers/djangoFormAnalyzer';
+import { ViewContextAnalyzer } from '../analyzers/viewContextAnalyzer';
+import { StaticFileAnalyzer } from '../analyzers/staticFileAnalyzer';
 
 // Configuration
 import { ProjectPathConfigurator } from '../projectPathConfigurator';
@@ -25,6 +27,8 @@ import { EnhancedCompletionProvider } from '../providers/enhancedCompletionProvi
 import { UrlTagCompletionProvider } from '../providers/urlTagCompletionProvider';
 import { DjangoFormsCompletionProvider } from '../providers/djangoFormsCompletionProvider';
 import { DjangoModelFormCompletionProvider } from '../providers/djangoModelFormCompletionProvider';
+import { TemplateContextCompletionProvider } from '../providers/templateContextCompletionProvider';
+import { StaticPathCompletionProvider } from '../providers/staticPathCompletionProvider';
 
 // Definition providers
 import { DjangoDefinitionProvider } from '../providers/djangoDefinitionProvider';
@@ -57,6 +61,8 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<AdvancedModelAnalyzer>(TYPES.AdvancedModelAnalyzer).to(AdvancedModelAnalyzer).inSingletonScope();
     container.bind<UrlPatternAnalyzer>(TYPES.UrlPatternAnalyzer).to(UrlPatternAnalyzer).inSingletonScope();
     container.bind<DjangoFormAnalyzer>(TYPES.DjangoFormAnalyzer).to(DjangoFormAnalyzer).inSingletonScope();
+    container.bind<ViewContextAnalyzer>(TYPES.ViewContextAnalyzer).to(ViewContextAnalyzer).inSingletonScope();
+    container.bind<StaticFileAnalyzer>(TYPES.StaticFileAnalyzer).to(StaticFileAnalyzer).inSingletonScope();
     
     // Configuration - Singleton
     container.bind<ProjectPathConfigurator>(TYPES.ProjectPathConfigurator).to(ProjectPathConfigurator).inSingletonScope();
@@ -72,6 +78,8 @@ export function createContainer(context: vscode.ExtensionContext): Container {
     container.bind<UrlTagCompletionProvider>(TYPES.UrlTagCompletionProvider).to(UrlTagCompletionProvider);
     container.bind<DjangoFormsCompletionProvider>(TYPES.DjangoFormsCompletionProvider).to(DjangoFormsCompletionProvider);
     container.bind<DjangoModelFormCompletionProvider>(TYPES.DjangoModelFormCompletionProvider).to(DjangoModelFormCompletionProvider);
+    container.bind<TemplateContextCompletionProvider>(TYPES.TemplateContextCompletionProvider).to(TemplateContextCompletionProvider);
+    container.bind<StaticPathCompletionProvider>(TYPES.StaticPathCompletionProvider).to(StaticPathCompletionProvider);
     
     // Definition providers - Transient
     container.bind<DjangoDefinitionProvider>(TYPES.DjangoDefinitionProvider).to(DjangoDefinitionProvider);

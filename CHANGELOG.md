@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Static file path autocomplete:
+  - Auto-completion in {% static %} tags
+  - Nested directory navigation
+  - File type icons (CSS, JS, images, fonts)
+  - File size information in documentation
+  - Real-time file system watching for updates
+  - Support for STATICFILES_DIRS and app-specific static directories
+- Context-aware template autocomplete:
+  - View context variables automatically detected in templates
+  - QuerySet methods available for context variables
+  - Form rendering methods (as_p, as_table, etc.) for form variables
+  - Loop variable recognition inside {% for %} tags
+  - Common Django template variables (request, user, etc.)
 - Cross-file hyperlink navigation (Go to Definition) support:
   - Template URL tags → URL pattern definitions in urls.py
   - URL pattern view references → View class/function definitions

@@ -21,6 +21,8 @@
 | **manage.py 명령 통합** | VS Code에서 직접 Django 명령 실행 | ✅ 완료 |
 | **다중 프로젝트 지원** | 하나의 워크스페이스에서 여러 Django 프로젝트 관리 | ✅ 완료 |
 | **파일 간 하이퍼링크** | Go to Definition으로 URL, View, Template 간 빠른 이동 | ✅ 완료 |
+| **컨텍스트 인식 템플릿 자동완성** | View에서 Template으로 전달되는 context 변수 자동완성 | ✅ 완료 |
+| **정적 파일 경로 자동완성** | `{% static %}` 태그에서 정적 파일 경로 자동완성 | ✅ 완료 |
 
 ### 🔥 주요 차별점
 - **제로 구성**: 프로젝트를 열면 자동으로 Django 환경 감지 및 설정
@@ -64,6 +66,23 @@ Django 프로젝트의 파일 간 빠른 탐색을 지원합니다.
 - ✅ **URL → View**: urls.py의 view 참조에서 해당 view 정의로 이동
 - ✅ **View → 템플릿**: template_name에서 실제 템플릿 파일로 이동
 - ✅ **네임스페이스 지원**: `app_name:url_name` 형식의 URL 이름 지원
+
+### 🎨 컨텍스트 인식 템플릿 자동완성
+View에서 Template으로 전달되는 context 변수를 분석하여 템플릿에서 자동완성을 제공합니다.
+
+- ✅ **Context 변수 자동완성**: `{{ posts }}`, `{{ form }}` 등 View에서 전달된 변수 제안
+- ✅ **QuerySet 메서드**: `{{ posts.count }}`, `{{ posts.first }}` 등 QuerySet 메서드 지원
+- ✅ **Form 메서드**: `{{ form.as_p }}`, `{{ form.errors }}` 등 Form 렌더링 메서드 제공
+- ✅ **Loop 변수 인식**: `{% for post in posts %}` 내부에서 `{{ post }}` 변수 자동완성
+
+### 📁 정적 파일 경로 자동완성
+Django 템플릿에서 정적 파일 경로를 쉽게 찾고 입력할 수 있습니다.
+
+- ✅ **Static 태그 지원**: `{% static 'css/style.css' %}` 태그에서 파일 경로 자동완성
+- ✅ **디렉토리 구조 탐색**: 중첩된 디렉토리 구조를 쉽게 탐색
+- ✅ **파일 타입 아이콘**: CSS, JS, 이미지 등 파일 타입별 아이콘 표시
+- ✅ **파일 크기 정보**: 각 파일의 크기 정보 제공
+- ✅ **실시간 업데이트**: 정적 파일 추가/삭제 시 자동 업데이트
 
 ## 📦 설치
 
@@ -153,6 +172,48 @@ class UserForm(forms.ModelForm):
     def clean_username(self):  # clean_ 입력 시 필드별 검증 메서드 제안
         username = self.cleaned_data.get('username')
         return username
+```
+
+### Context 인식 템플릿 자동완성
+```python
+# views.py
+def post_list(request):
+    posts = Post.objects.filter(is_published=True)
+    categories = Category.objects.all()
+    return render(request, 'blog/post_list.html', {
+        'posts': posts,
+        'categories': categories,
+        'title': 'My Blog'
+    })
+```
+
+```django
+<!-- templates/blog/post_list.html -->
+<h1>{{ title }}</h1>  <!-- title 변수 자동완성 -->
+
+{% for post in posts %}  
+    <!-- post 변수가 자동으로 인식됩니다 -->
+    <h2>{{ post.title }}</h2>  <!-- 모델 필드 자동완성 -->
+    <p>{{ post.content }}</p>
+{% endfor %}
+
+<!-- QuerySet 메서드 자동완성 -->
+<p>Total posts: {{ posts.count }}</p>
+```
+
+### 정적 파일 경로 자동완성
+```django
+{% load static %}
+
+<!-- CSS 파일 -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!-- 자동완성으로 쉽게 찾기 -->
+
+<!-- 중첩된 디렉토리 구조 -->
+<script src="{% static 'js/components/header.js' %}"></script>
+
+<!-- 이미지 파일 -->
+<img src="{% static 'images/logo.png' %}" alt="Logo">
 ```
 
 ### manage.py 명령 실행
